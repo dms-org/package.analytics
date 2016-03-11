@@ -28,4 +28,13 @@ class GoogleAnalyticsDriverTest extends CmsTestCase
 
         $this->assertInstanceOf(GoogleAnalyticsForm::class, $form);
     }
+
+    public function testEmbedCode()
+    {
+        /** @var GoogleAnalyticsForm $form */
+        $form = $this->driver->getOptionsForm();
+        $form->trackingCode = 'UA-234343-Y';
+
+        $this->assertContains('UA-234343-Y', $this->driver->getEmbedCode($form));
+    }
 }

@@ -1,6 +1,7 @@
 <?php declare(strict_types = 1);
 
 namespace Dms\Package\Analytics;
+
 use Dms\Core\Model\ICriteria;
 use Dms\Core\Model\ISpecification;
 use Dms\Core\Persistence\IRepository;

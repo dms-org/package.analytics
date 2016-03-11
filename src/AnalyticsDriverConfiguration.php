@@ -58,4 +58,20 @@ class AnalyticsDriverConfiguration extends Entity
     {
         return AnalyticsDriverFactory::load($this->driverName);
     }
+
+    /**
+     * @return IAnalyticsData
+     */
+    public function getAnalyticsData() : IAnalyticsData
+    {
+        return $this->getDriver()->getAnalyticsData($this->options);
+    }
+
+    /**
+     * @return string
+     */
+    public function generateEmbedCode() : string
+    {
+        return $this->getDriver()->getEmbedCode($this->options);
+    }
 }

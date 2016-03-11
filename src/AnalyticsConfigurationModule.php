@@ -17,6 +17,11 @@ use Dms\Core\Common\Crud\Definition\Table\SummaryTableDefinition;
 class AnalyticsConfigurationModule extends CrudModule
 {
     /**
+     * @var IAnalyticsDriverConfigurationRepository
+     */
+    protected $dataSource;
+
+    /**
      * @inheritDoc
      */
     public function __construct(IAnalyticsDriverConfigurationRepository $dataSource, IAuthSystem $authSystem)
@@ -31,7 +36,7 @@ class AnalyticsConfigurationModule extends CrudModule
      */
     protected function defineCrudModule(CrudModuleDefinition $module)
     {
-        $module->name('analytics');
+        $module->name('config');
 
         $module->labelObjects()->fromCallback(function (AnalyticsDriverConfiguration $driverConfig) {
             return $driverConfig->getDriver()->getLabel();
@@ -40,7 +45,7 @@ class AnalyticsConfigurationModule extends CrudModule
         $module->crudForm(function (CrudFormDefinition $form) {
             $form->section('Details', [
                 $form->field(
-                    Field::create('type', 'Type')->string()->oneOf(AnalyticsDriverFactory::getDriverOptions())
+                    Field::create('type', 'Type')->string()->oneOf(AnalyticsDriverFactory::getDriverOptions())->required()
                 )->bindToProperty(AnalyticsDriverConfiguration::DRIVER_NAME)
             ]);
 
@@ -53,7 +58,7 @@ class AnalyticsConfigurationModule extends CrudModule
 
                 $form->continueSection([
                     $form->field(
-                        Field::create('options', 'Options')->form($optionsForm)
+                        Field::create('options', 'Options')->form($optionsForm)->required()
                     )->bindToProperty(AnalyticsDriverConfiguration::OPTIONS)
                 ]);
             });
@@ -64,5 +69,9 @@ class AnalyticsConfigurationModule extends CrudModule
         $module->summaryTable(function (SummaryTableDefinition $table) {
             $table->mapProperty(AnalyticsDriverConfiguration::DRIVER_NAME)->to(Field::create('name', 'Name')->string());
         });
+
+        foreach ($this->dataSource->getAll() as $driverConfig) {
+            $driverConfig->getAnalyticsData()->registerWidgets($module);
+        }
     }
 }

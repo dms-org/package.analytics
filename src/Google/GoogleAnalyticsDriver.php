@@ -56,6 +56,7 @@ class GoogleAnalyticsDriver implements IAnalyticsDriver
 
         $client = new Google_Client();
         $client->setApplicationName('dms.package.analytics');
+
         $client->setAssertionCredentials($credentials);
         if ($client->getAuth()->isAccessTokenExpired()) {
             $client->getAuth()->refreshTokenWithAssertion();
