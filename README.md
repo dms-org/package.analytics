@@ -1,7 +1,11 @@
-dms.package.<package>
+dms.package.analytics
 =====================
 
-<description>
+The analytics package for the DMS
+
+Implemented drivers:
+
+ - Google Analytics
 
 Links
 =====
