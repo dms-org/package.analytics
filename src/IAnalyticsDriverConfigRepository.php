@@ -11,54 +11,54 @@ use Dms\Core\Persistence\IRepository;
  *
  * @author Elliot Levin <elliotlevin@hotmail.com>
  */
-interface IAnalyticsDriverConfigurationRepository extends IRepository
+interface IAnalyticsDriverConfigRepository extends IRepository
 {
     /**
      * {@inheritDoc}
      *
-     * @return AnalyticsDriverConfiguration[]
+     * @return AnalyticsDriverConfig[]
      */
     public function getAll() : array;
 
     /**
      * {@inheritDoc}
      *
-     * @return AnalyticsDriverConfiguration
+     * @return AnalyticsDriverConfig
      */
     public function get($id);
 
     /**
      * {@inheritDoc}
      *
-     * @return AnalyticsDriverConfiguration[]
+     * @return AnalyticsDriverConfig[]
      */
     public function getAllById(array $ids) : array;
 
     /**
      * {@inheritDoc}
      *
-     * @return AnalyticsDriverConfiguration|null
+     * @return AnalyticsDriverConfig|null
      */
     public function tryGet($id);
 
     /**
      * {@inheritDoc}
      *
-     * @return AnalyticsDriverConfiguration[]
+     * @return AnalyticsDriverConfig[]
      */
     public function tryGetAll(array $ids) : array;
 
     /**
      * {@inheritDoc}
      *
-     * @return AnalyticsDriverConfiguration[]
+     * @return AnalyticsDriverConfig[]
      */
     public function matching(ICriteria $criteria) : array;
 
     /**
      * {@inheritDoc}
      *
-     * @return AnalyticsDriverConfiguration[]
+     * @return AnalyticsDriverConfig[]
      */
     public function satisfying(ISpecification $specification) : array;
 }

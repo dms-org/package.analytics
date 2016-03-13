@@ -26,7 +26,7 @@ class AnalyticsPackage extends Package
             ->widgets(['config.*']);
 
         $package->modules([
-            'config' => AnalyticsConfigurationModule::class
+            'config' => AnalyticsConfigModule::class
         ]);
     }
 }

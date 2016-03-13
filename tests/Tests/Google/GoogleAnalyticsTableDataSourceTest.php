@@ -2,10 +2,13 @@
 
 namespace Dms\Package\Analytics\Tests\Google;
 
+use Dms\Common\Structure\Field;
 use Dms\Common\Testing\CmsTestCase;
+use Dms\Core\Table\Builder\Column;
 use Dms\Core\Table\ITableRow;
 use Dms\Package\Analytics\Google\GoogleAnalyticsTableDataSource;
 use Google_Service_Analytics_DataGa_Resource;
+use Google_Service_Analytics_GaData;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>
@@ -30,9 +33,11 @@ class GoogleAnalyticsTableDataSourceTest extends CmsTestCase
     public function setUp()
     {
         $this->clientMock   = $this->getMockWithoutInvokingTheOriginalConstructor(Google_Service_Analytics_DataGa_Resource::class, ['get']);
-        $this->responseData = json_decode(file_get_contents(__DIR__ . '/data/response.json'), true);
+        $this->responseData = new Google_Service_Analytics_GaData(json_decode(file_get_contents(__DIR__ . '/data/response.json'), true));
 
-        $this->dataSource = new GoogleAnalyticsTableDataSource($this->clientMock, 123456, 365);
+        $this->dataSource = new GoogleAnalyticsTableDataSource($this->clientMock, 123456, 365, [
+            Column::from(Field::create('date', 'Date')->date()),
+        ], ['ga:date' => 'date']);
     }
 
     public function testLoadRows()
@@ -48,7 +53,7 @@ class GoogleAnalyticsTableDataSourceTest extends CmsTestCase
 
         $this->assertSame(null, $section->getGroupData());
         $this->assertContainsOnlyInstancesOf(ITableRow::class, $section->getRows());
-        $this->assertCount(85, $section->getRows());
+        $this->assertCount(60, $section->getRows());
     }
 
     public function testCountRows()
@@ -59,7 +64,7 @@ class GoogleAnalyticsTableDataSourceTest extends CmsTestCase
 
         $response = $this->dataSource->count();
 
-        $this->assertSame(85, $response);
+        $this->assertSame(60, $response);
     }
 
     public function testLoadNoCriteria()
@@ -70,8 +75,11 @@ class GoogleAnalyticsTableDataSourceTest extends CmsTestCase
                 'ga:123456',
                 '365daysAgo',
                 'today',
-                'ga:pageviews,ga:sessionDuration,ga:sessions',
-                ['dimensions' => 'ga:date,ga:pagePath,ga:browser,ga:browserVersion,ga:city,ga:country', 'start-index' => 0, 'itemsPerPage' => 10000]
+                'ga:pageviews,ga:sessions',
+                [
+                    'dimensions'  => 'ga:date',
+                    'start-index' => 1,
+                ]
             )
             ->willReturn($this->responseData);
 
@@ -86,10 +94,11 @@ class GoogleAnalyticsTableDataSourceTest extends CmsTestCase
                 'ga:123456',
                 '365daysAgo',
                 'today',
-                'ga:pageviews,ga:sessionDuration,ga:sessions',
+                'ga:pageviews,ga:sessions',
                 [
-                    'dimensions' => 'ga:date,ga:pagePath,ga:browser,ga:browserVersion,ga:city,ga:country', 'start-index' => 0, 'itemsPerPage' => 10000,
-                    'filter'     => 'ga:browser==Chrome;ga:browserVersion!=48',
+                    'dimensions'  => 'ga:date',
+                    'start-index' => 1,
+                    'filters'     => 'ga:sessions==10;ga:pageviews!=15',
                 ]
             )
             ->willReturn($this->responseData);
@@ -97,8 +106,8 @@ class GoogleAnalyticsTableDataSourceTest extends CmsTestCase
         $this->dataSource->load(
             $this->dataSource->criteria()
                 ->loadAll()
-                ->where('browser.name', '=', 'Chrome')
-                ->where('browser.version', '!=', '48')
+                ->where('statistics.sessions', '=', 10)
+                ->where('statistics.page_views', '!=', 15)
         );
     }
 
@@ -110,10 +119,11 @@ class GoogleAnalyticsTableDataSourceTest extends CmsTestCase
                 'ga:123456',
                 '365daysAgo',
                 'today',
-                'ga:pageviews,ga:sessionDuration,ga:sessions',
+                'ga:pageviews,ga:sessions',
                 [
-                    'dimensions' => 'ga:date,ga:pagePath,ga:browser,ga:browserVersion,ga:city,ga:country', 'start-index' => 0, 'itemsPerPage' => 10000,
-                    'sort'       => 'ga:browser,-ga:browserVersion',
+                    'dimensions'  => 'ga:date',
+                    'start-index' => 1,
+                    'sort'        => 'ga:date,-ga:date',
                 ]
             )
             ->willReturn($this->responseData);
@@ -121,8 +131,8 @@ class GoogleAnalyticsTableDataSourceTest extends CmsTestCase
         $this->dataSource->load(
             $this->dataSource->criteria()
                 ->loadAll()
-                ->orderByAsc('browser.name')
-                ->orderByDesc('browser.version')
+                ->orderByAsc('date')
+                ->orderByDesc('date')
         );
     }
 }

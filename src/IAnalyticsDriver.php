@@ -34,6 +34,16 @@ interface IAnalyticsDriver
     public function getOptionsForm() : FormObject;
 
     /**
+     * Validates the supplied credentials for the analytics API
+     * are correct.
+     *
+     * @param FormObject $options
+     *
+     * @return bool
+     */
+    public function validate(FormObject $options) : bool;
+
+    /**
      * Gets the available analytics data sources for the supplied
      * form data.
      *

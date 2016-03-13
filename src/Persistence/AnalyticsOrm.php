@@ -4,7 +4,7 @@ namespace Dms\Package\Analytics\Persistence;
 
 use Dms\Core\Persistence\Db\Mapping\Definition\Orm\OrmDefinition;
 use Dms\Core\Persistence\Db\Mapping\Orm;
-use Dms\Package\Analytics\AnalyticsDriverConfiguration;
+use Dms\Package\Analytics\AnalyticsDriverConfig;
 
 /**
  * The orm for the analytics package.
@@ -23,7 +23,7 @@ class AnalyticsOrm extends Orm
     protected function define(OrmDefinition $orm)
     {
         $orm->entities([
-            AnalyticsDriverConfiguration::class => AnalyticsDriverConfigurationMapper::class,
+            AnalyticsDriverConfig::class => AnalyticsDriverConfigMapper::class,
         ]);
     }
 }

@@ -10,18 +10,25 @@ namespace Dms\Package\Analytics;
 class AnalyticsEmbedCodeService
 {
     /**
-     * @var IAnalyticsDriverConfigurationRepository
+     * @var IAnalyticsDriverConfigRepository
      */
     protected $analyticsRepository;
 
     /**
+     * @var AnalyticsDriverFactory
+     */
+    protected $driverFactory;
+
+    /**
      * AnalyticsEmbedCodeService constructor.
      *
-     * @param IAnalyticsDriverConfigurationRepository $analyticsRepository
+     * @param IAnalyticsDriverConfigRepository $analyticsRepository
+     * @param AnalyticsDriverFactory           $driverFactory
      */
-    public function __construct(IAnalyticsDriverConfigurationRepository $analyticsRepository)
+    public function __construct(IAnalyticsDriverConfigRepository $analyticsRepository, AnalyticsDriverFactory $driverFactory)
     {
         $this->analyticsRepository = $analyticsRepository;
+        $this->driverFactory = $driverFactory;
     }
 
     /**
@@ -32,7 +39,8 @@ class AnalyticsEmbedCodeService
         $embedCodes = [];
 
         foreach ($this->analyticsRepository->getAll() as $driverConfig) {
-            $embedCodes[] = $driverConfig->generateEmbedCode();
+            $embedCodes[] = $this->driverFactory->load($driverConfig->driverName)
+                ->getEmbedCode($driverConfig->options);
         }
 
         return implode('', $embedCodes);

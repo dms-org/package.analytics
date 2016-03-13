@@ -1,2503 +1,351 @@
 {
-  "kind": "analytics#gaData",
-  "id": "https://www.googleapis.com/analytics/v3/data/ga?ids=ga:91470079&dimensions=ga:browser,ga:browserVersion,ga:country,ga:city,ga:pagePath,ga:date&metrics=ga:sessions,ga:pageviews&sort=ga:date&start-date=2016-02-01&end-date=2016-03-31",
-  "query": {
-    "start-date": "2016-02-01",
-    "end-date": "2016-03-31",
-    "ids": "ga:91470079",
-    "dimensions": "ga:browser,ga:browserVersion,ga:country,ga:city,ga:pagePath,ga:date",
-    "metrics": [
-      "ga:sessions",
-      "ga:pageviews"
+    "kind": "analytics#gaData",
+    "id": "https://www.googleapis.com/analytics/v3/data/ga?ids=ga:91470079&dimensions=ga:date&metrics=ga:sessions,ga:pageviews&start-date=2016-02-01&end-date=2016-03-31&start-index=1&max-results=10000",
+    "query": {
+        "start-date": "2016-02-01",
+        "end-date": "2016-03-31",
+        "ids": "ga:91470079",
+        "dimensions": "ga:date",
+        "metrics": [
+            "ga:sessions",
+            "ga:pageviews"
+        ],
+        "start-index": 1,
+        "max-results": 10000
+    },
+    "itemsPerPage": 10000,
+    "totalResults": 60,
+    "selfLink": "https://www.googleapis.com/analytics/v3/data/ga?ids=ga:91470079&dimensions=ga:date&metrics=ga:sessions,ga:pageviews&start-date=2016-02-01&end-date=2016-03-31&start-index=1&max-results=10000",
+    "profileInfo": {
+        "profileId": "91470079",
+        "accountId": "55023272",
+        "webPropertyId": "UA-55023272-1",
+        "internalWebPropertyId": "88090230",
+        "profileName": "Site",
+        "tableId": "ga:91470079"
+    },
+    "containsSampledData": false,
+    "columnHeaders": [
+        {
+            "name": "ga:date",
+            "columnType": "DIMENSION",
+            "dataType": "STRING"
+        },
+        {
+            "name": "ga:sessions",
+            "columnType": "METRIC",
+            "dataType": "INTEGER"
+        },
+        {
+            "name": "ga:pageviews",
+            "columnType": "METRIC",
+            "dataType": "INTEGER"
+        }
     ],
-    "sort": [
-      "ga:date"
-    ],
-    "start-index": 1,
-    "max-results": 1000
-  },
-  "itemsPerPage": 1000,
-  "totalResults": 85,
-  "selfLink": "https://www.googleapis.com/analytics/v3/data/ga?ids=ga:91470079&dimensions=ga:browser,ga:browserVersion,ga:country,ga:city,ga:pagePath,ga:date&metrics=ga:sessions,ga:pageviews&sort=ga:date&start-date=2016-02-01&end-date=2016-03-31",
-  "profileInfo": {
-    "profileId": "91470079",
-    "accountId": "55023272",
-    "webPropertyId": "UA-55023272-1",
-    "internalWebPropertyId": "88090230",
-    "profileName": "Site",
-    "tableId": "ga:91470079"
-  },
-  "containsSampledData": false,
-  "columnHeaders": [
-    {
-      "name": "ga:browser",
-      "columnType": "DIMENSION",
-      "dataType": "STRING"
+    "totalsForAllResults": {
+        "ga:sessions": "60",
+        "ga:pageviews": "97"
     },
-    {
-      "name": "ga:browserVersion",
-      "columnType": "DIMENSION",
-      "dataType": "STRING"
-    },
-    {
-      "name": "ga:country",
-      "columnType": "DIMENSION",
-      "dataType": "STRING"
-    },
-    {
-      "name": "ga:city",
-      "columnType": "DIMENSION",
-      "dataType": "STRING"
-    },
-    {
-      "name": "ga:pagePath",
-      "columnType": "DIMENSION",
-      "dataType": "STRING"
-    },
-    {
-      "name": "ga:date",
-      "columnType": "DIMENSION",
-      "dataType": "STRING"
-    },
-    {
-      "name": "ga:sessions",
-      "columnType": "METRIC",
-      "dataType": "INTEGER"
-    },
-    {
-      "name": "ga:pageviews",
-      "columnType": "METRIC",
-      "dataType": "INTEGER"
-    }
-  ],
-  "totalsForAllResults": {
-    "ga:sessions": "60",
-    "ga:pageviews": "97"
-  },
-  "dataTable": {
-    "cols": [
-      {
-        "id": "ga:browser",
-        "label": "ga:browser",
-        "type": "string"
-      },
-      {
-        "id": "ga:browserVersion",
-        "label": "ga:browserVersion",
-        "type": "string"
-      },
-      {
-        "id": "ga:country",
-        "label": "ga:country",
-        "type": "string"
-      },
-      {
-        "id": "ga:city",
-        "label": "ga:city",
-        "type": "string"
-      },
-      {
-        "id": "ga:pagePath",
-        "label": "ga:pagePath",
-        "type": "string"
-      },
-      {
-        "id": "ga:date",
-        "label": "ga:date",
-        "type": "date"
-      },
-      {
-        "id": "ga:sessions",
-        "label": "ga:sessions",
-        "type": "number"
-      },
-      {
-        "id": "ga:pageviews",
-        "label": "ga:pageviews",
-        "type": "number"
-      }
-    ],
     "rows": [
-      {
-        "c": [
-          {
-            "v": "Chrome"
-          },
-          {
-            "v": "47.0.2526.111"
-          },
-          {
-            "v": "Australia"
-          },
-          {
-            "v": "Melbourne"
-          },
-          {
-            "v": "/work/iddigital.html"
-          },
-          {
-            "v": "Date(2016, 01, 02)"
-          },
-          {
-            "v": "1"
-          },
-          {
-            "v": "1"
-          }
+        [
+            "20160201",
+            "0",
+            "0"
+        ],
+        [
+            "20160202",
+            "1",
+            "1"
+        ],
+        [
+            "20160203",
+            "2",
+            "4"
+        ],
+        [
+            "20160204",
+            "2",
+            "2"
+        ],
+        [
+            "20160205",
+            "2",
+            "3"
+        ],
+        [
+            "20160206",
+            "0",
+            "0"
+        ],
+        [
+            "20160207",
+            "0",
+            "0"
+        ],
+        [
+            "20160208",
+            "1",
+            "2"
+        ],
+        [
+            "20160209",
+            "1",
+            "1"
+        ],
+        [
+            "20160210",
+            "0",
+            "0"
+        ],
+        [
+            "20160211",
+            "1",
+            "3"
+        ],
+        [
+            "20160212",
+            "1",
+            "1"
+        ],
+        [
+            "20160213",
+            "3",
+            "3"
+        ],
+        [
+            "20160214",
+            "0",
+            "0"
+        ],
+        [
+            "20160215",
+            "2",
+            "3"
+        ],
+        [
+            "20160216",
+            "5",
+            "9"
+        ],
+        [
+            "20160217",
+            "3",
+            "5"
+        ],
+        [
+            "20160218",
+            "3",
+            "4"
+        ],
+        [
+            "20160219",
+            "5",
+            "9"
+        ],
+        [
+            "20160220",
+            "0",
+            "0"
+        ],
+        [
+            "20160221",
+            "1",
+            "1"
+        ],
+        [
+            "20160222",
+            "2",
+            "2"
+        ],
+        [
+            "20160223",
+            "0",
+            "0"
+        ],
+        [
+            "20160224",
+            "1",
+            "2"
+        ],
+        [
+            "20160225",
+            "3",
+            "5"
+        ],
+        [
+            "20160226",
+            "0",
+            "0"
+        ],
+        [
+            "20160227",
+            "2",
+            "2"
+        ],
+        [
+            "20160228",
+            "0",
+            "0"
+        ],
+        [
+            "20160229",
+            "2",
+            "9"
+        ],
+        [
+            "20160301",
+            "1",
+            "1"
+        ],
+        [
+            "20160302",
+            "1",
+            "1"
+        ],
+        [
+            "20160303",
+            "1",
+            "1"
+        ],
+        [
+            "20160304",
+            "5",
+            "7"
+        ],
+        [
+            "20160305",
+            "0",
+            "0"
+        ],
+        [
+            "20160306",
+            "1",
+            "1"
+        ],
+        [
+            "20160307",
+            "0",
+            "0"
+        ],
+        [
+            "20160308",
+            "2",
+            "6"
+        ],
+        [
+            "20160309",
+            "2",
+            "5"
+        ],
+        [
+            "20160310",
+            "4",
+            "4"
+        ],
+        [
+            "20160311",
+            "0",
+            "0"
+        ],
+        [
+            "20160312",
+            "0",
+            "0"
+        ],
+        [
+            "20160313",
+            "0",
+            "0"
+        ],
+        [
+            "20160314",
+            "0",
+            "0"
+        ],
+        [
+            "20160315",
+            "0",
+            "0"
+        ],
+        [
+            "20160316",
+            "0",
+            "0"
+        ],
+        [
+            "20160317",
+            "0",
+            "0"
+        ],
+        [
+            "20160318",
+            "0",
+            "0"
+        ],
+        [
+            "20160319",
+            "0",
+            "0"
+        ],
+        [
+            "20160320",
+            "0",
+            "0"
+        ],
+        [
+            "20160321",
+            "0",
+            "0"
+        ],
+        [
+            "20160322",
+            "0",
+            "0"
+        ],
+        [
+            "20160323",
+            "0",
+            "0"
+        ],
+        [
+            "20160324",
+            "0",
+            "0"
+        ],
+        [
+            "20160325",
+            "0",
+            "0"
+        ],
+        [
+            "20160326",
+            "0",
+            "0"
+        ],
+        [
+            "20160327",
+            "0",
+            "0"
+        ],
+        [
+            "20160328",
+            "0",
+            "0"
+        ],
+        [
+            "20160329",
+            "0",
+            "0"
+        ],
+        [
+            "20160330",
+            "0",
+            "0"
+        ],
+        [
+            "20160331",
+            "0",
+            "0"
         ]
-      },
-      {
-        "c": [
-          {
-            "v": "Chrome"
-          },
-          {
-            "v": "47.0.2526.111"
-          },
-          {
-            "v": "Australia"
-          },
-          {
-            "v": "Melbourne"
-          },
-          {
-            "v": "/about-me.html"
-          },
-          {
-            "v": "Date(2016, 01, 03)"
-          },
-          {
-            "v": "1"
-          },
-          {
-            "v": "2"
-          }
-        ]
-      },
-      {
-        "c": [
-          {
-            "v": "Chrome"
-          },
-          {
-            "v": "47.0.2526.111"
-          },
-          {
-            "v": "Australia"
-          },
-          {
-            "v": "Melbourne"
-          },
-          {
-            "v": "/stuff/pixelator.html"
-          },
-          {
-            "v": "Date(2016, 01, 03)"
-          },
-          {
-            "v": "0"
-          },
-          {
-            "v": "1"
-          }
-        ]
-      },
-      {
-        "c": [
-          {
-            "v": "Chrome"
-          },
-          {
-            "v": "48.0.2564.97"
-          },
-          {
-            "v": "Indonesia"
-          },
-          {
-            "v": "Bandung"
-          },
-          {
-            "v": "/"
-          },
-          {
-            "v": "Date(2016, 01, 03)"
-          },
-          {
-            "v": "1"
-          },
-          {
-            "v": "1"
-          }
-        ]
-      },
-      {
-        "c": [
-          {
-            "v": "Chrome"
-          },
-          {
-            "v": "48.0.2564.97"
-          },
-          {
-            "v": "United States"
-          },
-          {
-            "v": "Cicero"
-          },
-          {
-            "v": "/"
-          },
-          {
-            "v": "Date(2016, 01, 04)"
-          },
-          {
-            "v": "1"
-          },
-          {
-            "v": "1"
-          }
-        ]
-      },
-      {
-        "c": [
-          {
-            "v": "Chrome"
-          },
-          {
-            "v": "48.0.2564.97"
-          },
-          {
-            "v": "United States"
-          },
-          {
-            "v": "Lexington"
-          },
-          {
-            "v": "/"
-          },
-          {
-            "v": "Date(2016, 01, 04)"
-          },
-          {
-            "v": "1"
-          },
-          {
-            "v": "1"
-          }
-        ]
-      },
-      {
-        "c": [
-          {
-            "v": "Chrome"
-          },
-          {
-            "v": "47.0.2526.111"
-          },
-          {
-            "v": "Cyprus"
-          },
-          {
-            "v": "Nicosia"
-          },
-          {
-            "v": "/"
-          },
-          {
-            "v": "Date(2016, 01, 05)"
-          },
-          {
-            "v": "1"
-          },
-          {
-            "v": "1"
-          }
-        ]
-      },
-      {
-        "c": [
-          {
-            "v": "Chrome"
-          },
-          {
-            "v": "47.0.2526.111"
-          },
-          {
-            "v": "Cyprus"
-          },
-          {
-            "v": "Nicosia"
-          },
-          {
-            "v": "/projects/2014/12/10/Productivity-with-Personal-Projects.html"
-          },
-          {
-            "v": "Date(2016, 01, 05)"
-          },
-          {
-            "v": "0"
-          },
-          {
-            "v": "1"
-          }
-        ]
-      },
-      {
-        "c": [
-          {
-            "v": "Firefox"
-          },
-          {
-            "v": "29.0"
-          },
-          {
-            "v": "United States"
-          },
-          {
-            "v": "New York"
-          },
-          {
-            "v": "/"
-          },
-          {
-            "v": "Date(2016, 01, 05)"
-          },
-          {
-            "v": "1"
-          },
-          {
-            "v": "1"
-          }
-        ]
-      },
-      {
-        "c": [
-          {
-            "v": "Chrome"
-          },
-          {
-            "v": "48.0.2564.103"
-          },
-          {
-            "v": "Australia"
-          },
-          {
-            "v": "Perth"
-          },
-          {
-            "v": "/stuff/csws.html"
-          },
-          {
-            "v": "Date(2016, 01, 08)"
-          },
-          {
-            "v": "1"
-          },
-          {
-            "v": "2"
-          }
-        ]
-      },
-      {
-        "c": [
-          {
-            "v": "Chrome"
-          },
-          {
-            "v": "48.0.2564.97"
-          },
-          {
-            "v": "South Africa"
-          },
-          {
-            "v": "Randburg"
-          },
-          {
-            "v": "/"
-          },
-          {
-            "v": "Date(2016, 01, 09)"
-          },
-          {
-            "v": "1"
-          },
-          {
-            "v": "1"
-          }
-        ]
-      },
-      {
-        "c": [
-          {
-            "v": "Chrome"
-          },
-          {
-            "v": "48.0.2564.103"
-          },
-          {
-            "v": "Australia"
-          },
-          {
-            "v": "Melbourne"
-          },
-          {
-            "v": "/"
-          },
-          {
-            "v": "Date(2016, 01, 11)"
-          },
-          {
-            "v": "1"
-          },
-          {
-            "v": "1"
-          }
-        ]
-      },
-      {
-        "c": [
-          {
-            "v": "Chrome"
-          },
-          {
-            "v": "48.0.2564.103"
-          },
-          {
-            "v": "Australia"
-          },
-          {
-            "v": "Melbourne"
-          },
-          {
-            "v": "/stuff/rapid-route.html"
-          },
-          {
-            "v": "Date(2016, 01, 11)"
-          },
-          {
-            "v": "0"
-          },
-          {
-            "v": "1"
-          }
-        ]
-      },
-      {
-        "c": [
-          {
-            "v": "Chrome"
-          },
-          {
-            "v": "48.0.2564.103"
-          },
-          {
-            "v": "Australia"
-          },
-          {
-            "v": "Melbourne"
-          },
-          {
-            "v": "/work/iddigital-full-time.html"
-          },
-          {
-            "v": "Date(2016, 01, 11)"
-          },
-          {
-            "v": "0"
-          },
-          {
-            "v": "1"
-          }
-        ]
-      },
-      {
-        "c": [
-          {
-            "v": "Chrome"
-          },
-          {
-            "v": "48.0.2564.109"
-          },
-          {
-            "v": "Australia"
-          },
-          {
-            "v": "Perth"
-          },
-          {
-            "v": "/stuff/csws.html"
-          },
-          {
-            "v": "Date(2016, 01, 12)"
-          },
-          {
-            "v": "1"
-          },
-          {
-            "v": "1"
-          }
-        ]
-      },
-      {
-        "c": [
-          {
-            "v": "Chrome"
-          },
-          {
-            "v": "48.0.2564.109"
-          },
-          {
-            "v": "United Kingdom"
-          },
-          {
-            "v": "Liverpool"
-          },
-          {
-            "v": "/stuff/powerpoint-games.html"
-          },
-          {
-            "v": "Date(2016, 01, 13)"
-          },
-          {
-            "v": "1"
-          },
-          {
-            "v": "1"
-          }
-        ]
-      },
-      {
-        "c": [
-          {
-            "v": "Firefox"
-          },
-          {
-            "v": "28.0"
-          },
-          {
-            "v": "United States"
-          },
-          {
-            "v": "New York"
-          },
-          {
-            "v": "/"
-          },
-          {
-            "v": "Date(2016, 01, 13)"
-          },
-          {
-            "v": "1"
-          },
-          {
-            "v": "1"
-          }
-        ]
-      },
-      {
-        "c": [
-          {
-            "v": "Safari"
-          },
-          {
-            "v": "6.0"
-          },
-          {
-            "v": "Australia"
-          },
-          {
-            "v": "Melbourne"
-          },
-          {
-            "v": "/stuff/csws.html"
-          },
-          {
-            "v": "Date(2016, 01, 13)"
-          },
-          {
-            "v": "1"
-          },
-          {
-            "v": "1"
-          }
-        ]
-      },
-      {
-        "c": [
-          {
-            "v": "Chrome"
-          },
-          {
-            "v": "46.0.2490.86"
-          },
-          {
-            "v": "Australia"
-          },
-          {
-            "v": "Melbourne"
-          },
-          {
-            "v": "/stuff/kill-drive.html"
-          },
-          {
-            "v": "Date(2016, 01, 15)"
-          },
-          {
-            "v": "1"
-          },
-          {
-            "v": "1"
-          }
-        ]
-      },
-      {
-        "c": [
-          {
-            "v": "Chrome"
-          },
-          {
-            "v": "46.0.2490.86"
-          },
-          {
-            "v": "Australia"
-          },
-          {
-            "v": "Melbourne"
-          },
-          {
-            "v": "/work/iddigital-full-time.html"
-          },
-          {
-            "v": "Date(2016, 01, 15)"
-          },
-          {
-            "v": "0"
-          },
-          {
-            "v": "1"
-          }
-        ]
-      },
-      {
-        "c": [
-          {
-            "v": "Chrome"
-          },
-          {
-            "v": "48.0.2564.109"
-          },
-          {
-            "v": "Australia"
-          },
-          {
-            "v": "Adelaide"
-          },
-          {
-            "v": "/stuff/kill-drive.html"
-          },
-          {
-            "v": "Date(2016, 01, 15)"
-          },
-          {
-            "v": "1"
-          },
-          {
-            "v": "1"
-          }
-        ]
-      },
-      {
-        "c": [
-          {
-            "v": "Chrome"
-          },
-          {
-            "v": "48.0.2564.109"
-          },
-          {
-            "v": "India"
-          },
-          {
-            "v": "Chennai"
-          },
-          {
-            "v": "/"
-          },
-          {
-            "v": "Date(2016, 01, 16)"
-          },
-          {
-            "v": "1"
-          },
-          {
-            "v": "1"
-          }
-        ]
-      },
-      {
-        "c": [
-          {
-            "v": "Chrome"
-          },
-          {
-            "v": "48.0.2564.109"
-          },
-          {
-            "v": "India"
-          },
-          {
-            "v": "Chennai"
-          },
-          {
-            "v": "/stuff/pixelator.html"
-          },
-          {
-            "v": "Date(2016, 01, 16)"
-          },
-          {
-            "v": "0"
-          },
-          {
-            "v": "1"
-          }
-        ]
-      },
-      {
-        "c": [
-          {
-            "v": "Chrome"
-          },
-          {
-            "v": "48.0.2564.109"
-          },
-          {
-            "v": "India"
-          },
-          {
-            "v": "Chennai"
-          },
-          {
-            "v": "/stuff/rapid-route.html"
-          },
-          {
-            "v": "Date(2016, 01, 16)"
-          },
-          {
-            "v": "0"
-          },
-          {
-            "v": "1"
-          }
-        ]
-      },
-      {
-        "c": [
-          {
-            "v": "Chrome"
-          },
-          {
-            "v": "48.0.2564.109"
-          },
-          {
-            "v": "India"
-          },
-          {
-            "v": "Vadodara"
-          },
-          {
-            "v": "/programming/2014/11/06/Measuring-Progress-as-a-Programmer.html"
-          },
-          {
-            "v": "Date(2016, 01, 16)"
-          },
-          {
-            "v": "0"
-          },
-          {
-            "v": "1"
-          }
-        ]
-      },
-      {
-        "c": [
-          {
-            "v": "Chrome"
-          },
-          {
-            "v": "48.0.2564.109"
-          },
-          {
-            "v": "India"
-          },
-          {
-            "v": "Vadodara"
-          },
-          {
-            "v": "/programming/past/2014/09/24/My-Story-as-a-Teenage-Programmer.html"
-          },
-          {
-            "v": "Date(2016, 01, 16)"
-          },
-          {
-            "v": "1"
-          },
-          {
-            "v": "1"
-          }
-        ]
-      },
-      {
-        "c": [
-          {
-            "v": "Chrome"
-          },
-          {
-            "v": "48.0.2564.109"
-          },
-          {
-            "v": "India"
-          },
-          {
-            "v": "Vadodara"
-          },
-          {
-            "v": "/projects/2014/12/10/Productivity-with-Personal-Projects.html"
-          },
-          {
-            "v": "Date(2016, 01, 16)"
-          },
-          {
-            "v": "0"
-          },
-          {
-            "v": "1"
-          }
-        ]
-      },
-      {
-        "c": [
-          {
-            "v": "Chrome"
-          },
-          {
-            "v": "48.0.2564.95"
-          },
-          {
-            "v": "India"
-          },
-          {
-            "v": "Shimla"
-          },
-          {
-            "v": "/"
-          },
-          {
-            "v": "Date(2016, 01, 16)"
-          },
-          {
-            "v": "1"
-          },
-          {
-            "v": "1"
-          }
-        ]
-      },
-      {
-        "c": [
-          {
-            "v": "Internet Explorer"
-          },
-          {
-            "v": "11.0"
-          },
-          {
-            "v": "Australia"
-          },
-          {
-            "v": "Melbourne"
-          },
-          {
-            "v": "/stuff/csws.html"
-          },
-          {
-            "v": "Date(2016, 01, 16)"
-          },
-          {
-            "v": "1"
-          },
-          {
-            "v": "1"
-          }
-        ]
-      },
-      {
-        "c": [
-          {
-            "v": "Safari"
-          },
-          {
-            "v": "9.0"
-          },
-          {
-            "v": "Australia"
-          },
-          {
-            "v": "Melbourne"
-          },
-          {
-            "v": "/stuff/calc-cas-programs.html"
-          },
-          {
-            "v": "Date(2016, 01, 16)"
-          },
-          {
-            "v": "1"
-          },
-          {
-            "v": "1"
-          }
-        ]
-      },
-      {
-        "c": [
-          {
-            "v": "Chrome"
-          },
-          {
-            "v": "48.0.2564.109"
-          },
-          {
-            "v": "Australia"
-          },
-          {
-            "v": "Whyalla"
-          },
-          {
-            "v": "/stuff/kill-drive.html"
-          },
-          {
-            "v": "Date(2016, 01, 17)"
-          },
-          {
-            "v": "1"
-          },
-          {
-            "v": "1"
-          }
-        ]
-      },
-      {
-        "c": [
-          {
-            "v": "Chrome"
-          },
-          {
-            "v": "48.0.2564.109"
-          },
-          {
-            "v": "Hungary"
-          },
-          {
-            "v": "Budapest"
-          },
-          {
-            "v": "/"
-          },
-          {
-            "v": "Date(2016, 01, 17)"
-          },
-          {
-            "v": "1"
-          },
-          {
-            "v": "3"
-          }
-        ]
-      },
-      {
-        "c": [
-          {
-            "v": "Chrome"
-          },
-          {
-            "v": "48.0.2564.109"
-          },
-          {
-            "v": "United States"
-          },
-          {
-            "v": "Norwalk"
-          },
-          {
-            "v": "/stuff/mini-projects.html"
-          },
-          {
-            "v": "Date(2016, 01, 17)"
-          },
-          {
-            "v": "1"
-          },
-          {
-            "v": "1"
-          }
-        ]
-      },
-      {
-        "c": [
-          {
-            "v": "Chrome"
-          },
-          {
-            "v": "48.0.2564.103"
-          },
-          {
-            "v": "Brazil"
-          },
-          {
-            "v": "Rio de Janeiro"
-          },
-          {
-            "v": "/programming/2014/11/06/Measuring-Progress-as-a-Programmer.html"
-          },
-          {
-            "v": "Date(2016, 01, 18)"
-          },
-          {
-            "v": "1"
-          },
-          {
-            "v": "1"
-          }
-        ]
-      },
-      {
-        "c": [
-          {
-            "v": "Chrome"
-          },
-          {
-            "v": "48.0.2564.109"
-          },
-          {
-            "v": "Mexico"
-          },
-          {
-            "v": "Mexico City"
-          },
-          {
-            "v": "/"
-          },
-          {
-            "v": "Date(2016, 01, 18)"
-          },
-          {
-            "v": "1"
-          },
-          {
-            "v": "1"
-          }
-        ]
-      },
-      {
-        "c": [
-          {
-            "v": "Chrome"
-          },
-          {
-            "v": "48.0.2564.109"
-          },
-          {
-            "v": "Mexico"
-          },
-          {
-            "v": "Mexico City"
-          },
-          {
-            "v": "/about-me.html"
-          },
-          {
-            "v": "Date(2016, 01, 18)"
-          },
-          {
-            "v": "0"
-          },
-          {
-            "v": "1"
-          }
-        ]
-      },
-      {
-        "c": [
-          {
-            "v": "Safari"
-          },
-          {
-            "v": "9.0.3"
-          },
-          {
-            "v": "France"
-          },
-          {
-            "v": "Paris"
-          },
-          {
-            "v": "/"
-          },
-          {
-            "v": "Date(2016, 01, 18)"
-          },
-          {
-            "v": "1"
-          },
-          {
-            "v": "1"
-          }
-        ]
-      },
-      {
-        "c": [
-          {
-            "v": "Chrome"
-          },
-          {
-            "v": "48.0.2564.109"
-          },
-          {
-            "v": "Mexico"
-          },
-          {
-            "v": "Mexico City"
-          },
-          {
-            "v": "/"
-          },
-          {
-            "v": "Date(2016, 01, 19)"
-          },
-          {
-            "v": "1"
-          },
-          {
-            "v": "1"
-          }
-        ]
-      },
-      {
-        "c": [
-          {
-            "v": "Chrome"
-          },
-          {
-            "v": "48.0.2564.109"
-          },
-          {
-            "v": "Mexico"
-          },
-          {
-            "v": "Mexico City"
-          },
-          {
-            "v": "/about-me.html"
-          },
-          {
-            "v": "Date(2016, 01, 19)"
-          },
-          {
-            "v": "0"
-          },
-          {
-            "v": "1"
-          }
-        ]
-      },
-      {
-        "c": [
-          {
-            "v": "Chrome"
-          },
-          {
-            "v": "48.0.2564.109"
-          },
-          {
-            "v": "Ukraine"
-          },
-          {
-            "v": "Lviv"
-          },
-          {
-            "v": "/"
-          },
-          {
-            "v": "Date(2016, 01, 19)"
-          },
-          {
-            "v": "1"
-          },
-          {
-            "v": "1"
-          }
-        ]
-      },
-      {
-        "c": [
-          {
-            "v": "Chrome"
-          },
-          {
-            "v": "48.0.2564.109"
-          },
-          {
-            "v": "Ukraine"
-          },
-          {
-            "v": "Lviv"
-          },
-          {
-            "v": "/about-me.html"
-          },
-          {
-            "v": "Date(2016, 01, 19)"
-          },
-          {
-            "v": "0"
-          },
-          {
-            "v": "2"
-          }
-        ]
-      },
-      {
-        "c": [
-          {
-            "v": "Chrome"
-          },
-          {
-            "v": "48.0.2564.109"
-          },
-          {
-            "v": "United States"
-          },
-          {
-            "v": "San Diego"
-          },
-          {
-            "v": "/"
-          },
-          {
-            "v": "Date(2016, 01, 19)"
-          },
-          {
-            "v": "1"
-          },
-          {
-            "v": "1"
-          }
-        ]
-      },
-      {
-        "c": [
-          {
-            "v": "Chrome"
-          },
-          {
-            "v": "48.0.2564.109"
-          },
-          {
-            "v": "United States"
-          },
-          {
-            "v": "San Diego"
-          },
-          {
-            "v": "/about-me.html"
-          },
-          {
-            "v": "Date(2016, 01, 19)"
-          },
-          {
-            "v": "0"
-          },
-          {
-            "v": "1"
-          }
-        ]
-      },
-      {
-        "c": [
-          {
-            "v": "Internet Explorer"
-          },
-          {
-            "v": "10.0"
-          },
-          {
-            "v": "Denmark"
-          },
-          {
-            "v": "Aarhus"
-          },
-          {
-            "v": "/stuff/powerpoint-games.html"
-          },
-          {
-            "v": "Date(2016, 01, 19)"
-          },
-          {
-            "v": "1"
-          },
-          {
-            "v": "1"
-          }
-        ]
-      },
-      {
-        "c": [
-          {
-            "v": "Safari"
-          },
-          {
-            "v": "9.0"
-          },
-          {
-            "v": "Vietnam"
-          },
-          {
-            "v": "Natural Heritage Area Trang"
-          },
-          {
-            "v": "/stuff/powerpoint-games.html"
-          },
-          {
-            "v": "Date(2016, 01, 19)"
-          },
-          {
-            "v": "1"
-          },
-          {
-            "v": "1"
-          }
-        ]
-      },
-      {
-        "c": [
-          {
-            "v": "Chrome"
-          },
-          {
-            "v": "48.0.2564.116"
-          },
-          {
-            "v": "Australia"
-          },
-          {
-            "v": "Melbourne"
-          },
-          {
-            "v": "/"
-          },
-          {
-            "v": "Date(2016, 01, 21)"
-          },
-          {
-            "v": "1"
-          },
-          {
-            "v": "1"
-          }
-        ]
-      },
-      {
-        "c": [
-          {
-            "v": "Chrome"
-          },
-          {
-            "v": "48.0.2564.116"
-          },
-          {
-            "v": "Australia"
-          },
-          {
-            "v": "Melbourne"
-          },
-          {
-            "v": "/"
-          },
-          {
-            "v": "Date(2016, 01, 22)"
-          },
-          {
-            "v": "1"
-          },
-          {
-            "v": "1"
-          }
-        ]
-      },
-      {
-        "c": [
-          {
-            "v": "Firefox"
-          },
-          {
-            "v": "29.0"
-          },
-          {
-            "v": "United States"
-          },
-          {
-            "v": "New York"
-          },
-          {
-            "v": "/"
-          },
-          {
-            "v": "Date(2016, 01, 22)"
-          },
-          {
-            "v": "1"
-          },
-          {
-            "v": "1"
-          }
-        ]
-      },
-      {
-        "c": [
-          {
-            "v": "Chrome"
-          },
-          {
-            "v": "48.0.2564.95"
-          },
-          {
-            "v": "Indonesia"
-          },
-          {
-            "v": "Bandung"
-          },
-          {
-            "v": "/"
-          },
-          {
-            "v": "Date(2016, 01, 24)"
-          },
-          {
-            "v": "1"
-          },
-          {
-            "v": "2"
-          }
-        ]
-      },
-      {
-        "c": [
-          {
-            "v": "Chrome"
-          },
-          {
-            "v": "48.0.2564.116"
-          },
-          {
-            "v": "Indonesia"
-          },
-          {
-            "v": "Bandung"
-          },
-          {
-            "v": "/"
-          },
-          {
-            "v": "Date(2016, 01, 25)"
-          },
-          {
-            "v": "2"
-          },
-          {
-            "v": "2"
-          }
-        ]
-      },
-      {
-        "c": [
-          {
-            "v": "Chrome"
-          },
-          {
-            "v": "48.0.2564.116"
-          },
-          {
-            "v": "Indonesia"
-          },
-          {
-            "v": "Bandung"
-          },
-          {
-            "v": "/pinq"
-          },
-          {
-            "v": "Date(2016, 01, 25)"
-          },
-          {
-            "v": "0"
-          },
-          {
-            "v": "2"
-          }
-        ]
-      },
-      {
-        "c": [
-          {
-            "v": "Chrome"
-          },
-          {
-            "v": "48.0.2564.95"
-          },
-          {
-            "v": "Indonesia"
-          },
-          {
-            "v": "Bandung"
-          },
-          {
-            "v": "/"
-          },
-          {
-            "v": "Date(2016, 01, 25)"
-          },
-          {
-            "v": "1"
-          },
-          {
-            "v": "1"
-          }
-        ]
-      },
-      {
-        "c": [
-          {
-            "v": "Chrome"
-          },
-          {
-            "v": "48.0.2564.95"
-          },
-          {
-            "v": "Germany"
-          },
-          {
-            "v": "Berlin"
-          },
-          {
-            "v": "/"
-          },
-          {
-            "v": "Date(2016, 01, 27)"
-          },
-          {
-            "v": "1"
-          },
-          {
-            "v": "1"
-          }
-        ]
-      },
-      {
-        "c": [
-          {
-            "v": "Safari"
-          },
-          {
-            "v": "8.0"
-          },
-          {
-            "v": "Canada"
-          },
-          {
-            "v": "Prince George"
-          },
-          {
-            "v": "/programming/2014/11/06/Measuring-Progress-as-a-Programmer.html"
-          },
-          {
-            "v": "Date(2016, 01, 27)"
-          },
-          {
-            "v": "1"
-          },
-          {
-            "v": "1"
-          }
-        ]
-      },
-      {
-        "c": [
-          {
-            "v": "Chrome"
-          },
-          {
-            "v": "48.0.2564.116"
-          },
-          {
-            "v": "Canada"
-          },
-          {
-            "v": "Chicoutimi"
-          },
-          {
-            "v": "/programming/past/2014/09/24/My-Story-as-a-Teenage-Programmer.html"
-          },
-          {
-            "v": "Date(2016, 01, 29)"
-          },
-          {
-            "v": "1"
-          },
-          {
-            "v": "1"
-          }
-        ]
-      },
-      {
-        "c": [
-          {
-            "v": "Chrome"
-          },
-          {
-            "v": "48.0.2564.116"
-          },
-          {
-            "v": "Japan"
-          },
-          {
-            "v": "Yokohama"
-          },
-          {
-            "v": "/"
-          },
-          {
-            "v": "Date(2016, 01, 29)"
-          },
-          {
-            "v": "1"
-          },
-          {
-            "v": "1"
-          }
-        ]
-      },
-      {
-        "c": [
-          {
-            "v": "Chrome"
-          },
-          {
-            "v": "48.0.2564.116"
-          },
-          {
-            "v": "Japan"
-          },
-          {
-            "v": "Yokohama"
-          },
-          {
-            "v": "/about-me.html"
-          },
-          {
-            "v": "Date(2016, 01, 29)"
-          },
-          {
-            "v": "0"
-          },
-          {
-            "v": "1"
-          }
-        ]
-      },
-      {
-        "c": [
-          {
-            "v": "Chrome"
-          },
-          {
-            "v": "48.0.2564.116"
-          },
-          {
-            "v": "Japan"
-          },
-          {
-            "v": "Yokohama"
-          },
-          {
-            "v": "/posts.html"
-          },
-          {
-            "v": "Date(2016, 01, 29)"
-          },
-          {
-            "v": "0"
-          },
-          {
-            "v": "1"
-          }
-        ]
-      },
-      {
-        "c": [
-          {
-            "v": "Chrome"
-          },
-          {
-            "v": "48.0.2564.116"
-          },
-          {
-            "v": "Japan"
-          },
-          {
-            "v": "Yokohama"
-          },
-          {
-            "v": "/stuff/kill-drive.html"
-          },
-          {
-            "v": "Date(2016, 01, 29)"
-          },
-          {
-            "v": "0"
-          },
-          {
-            "v": "1"
-          }
-        ]
-      },
-      {
-        "c": [
-          {
-            "v": "Chrome"
-          },
-          {
-            "v": "48.0.2564.116"
-          },
-          {
-            "v": "Japan"
-          },
-          {
-            "v": "Yokohama"
-          },
-          {
-            "v": "/stuff/netyelp.html"
-          },
-          {
-            "v": "Date(2016, 01, 29)"
-          },
-          {
-            "v": "0"
-          },
-          {
-            "v": "1"
-          }
-        ]
-      },
-      {
-        "c": [
-          {
-            "v": "Chrome"
-          },
-          {
-            "v": "48.0.2564.116"
-          },
-          {
-            "v": "Japan"
-          },
-          {
-            "v": "Yokohama"
-          },
-          {
-            "v": "/stuff/pixelator.html"
-          },
-          {
-            "v": "Date(2016, 01, 29)"
-          },
-          {
-            "v": "0"
-          },
-          {
-            "v": "1"
-          }
-        ]
-      },
-      {
-        "c": [
-          {
-            "v": "Chrome"
-          },
-          {
-            "v": "48.0.2564.116"
-          },
-          {
-            "v": "Japan"
-          },
-          {
-            "v": "Yokohama"
-          },
-          {
-            "v": "/stuff/powerpoint-games.html"
-          },
-          {
-            "v": "Date(2016, 01, 29)"
-          },
-          {
-            "v": "0"
-          },
-          {
-            "v": "1"
-          }
-        ]
-      },
-      {
-        "c": [
-          {
-            "v": "Chrome"
-          },
-          {
-            "v": "48.0.2564.116"
-          },
-          {
-            "v": "Japan"
-          },
-          {
-            "v": "Yokohama"
-          },
-          {
-            "v": "/work/iddigital-full-time.html"
-          },
-          {
-            "v": "Date(2016, 01, 29)"
-          },
-          {
-            "v": "0"
-          },
-          {
-            "v": "1"
-          }
-        ]
-      },
-      {
-        "c": [
-          {
-            "v": "Chrome"
-          },
-          {
-            "v": "34.0.1847.131"
-          },
-          {
-            "v": "United States"
-          },
-          {
-            "v": "New York"
-          },
-          {
-            "v": "/"
-          },
-          {
-            "v": "Date(2016, 02, 01)"
-          },
-          {
-            "v": "1"
-          },
-          {
-            "v": "1"
-          }
-        ]
-      },
-      {
-        "c": [
-          {
-            "v": "Chrome"
-          },
-          {
-            "v": "38.0.2125.102"
-          },
-          {
-            "v": "Australia"
-          },
-          {
-            "v": "Melbourne"
-          },
-          {
-            "v": "/stuff/csws.html"
-          },
-          {
-            "v": "Date(2016, 02, 02)"
-          },
-          {
-            "v": "1"
-          },
-          {
-            "v": "1"
-          }
-        ]
-      },
-      {
-        "c": [
-          {
-            "v": "Chrome"
-          },
-          {
-            "v": "48.0.2564.116"
-          },
-          {
-            "v": "Australia"
-          },
-          {
-            "v": "Melbourne"
-          },
-          {
-            "v": "/"
-          },
-          {
-            "v": "Date(2016, 02, 03)"
-          },
-          {
-            "v": "1"
-          },
-          {
-            "v": "1"
-          }
-        ]
-      },
-      {
-        "c": [
-          {
-            "v": "Chrome"
-          },
-          {
-            "v": "48.0.2564.116"
-          },
-          {
-            "v": "Australia"
-          },
-          {
-            "v": "Melbourne"
-          },
-          {
-            "v": "/stuff/csws.html"
-          },
-          {
-            "v": "Date(2016, 02, 04)"
-          },
-          {
-            "v": "2"
-          },
-          {
-            "v": "2"
-          }
-        ]
-      },
-      {
-        "c": [
-          {
-            "v": "Chrome"
-          },
-          {
-            "v": "48.0.2564.116"
-          },
-          {
-            "v": "Ukraine"
-          },
-          {
-            "v": "Lviv"
-          },
-          {
-            "v": "/"
-          },
-          {
-            "v": "Date(2016, 02, 04)"
-          },
-          {
-            "v": "1"
-          },
-          {
-            "v": "2"
-          }
-        ]
-      },
-      {
-        "c": [
-          {
-            "v": "Chrome"
-          },
-          {
-            "v": "48.0.2564.116"
-          },
-          {
-            "v": "Ukraine"
-          },
-          {
-            "v": "Lviv"
-          },
-          {
-            "v": "/about-me.html"
-          },
-          {
-            "v": "Date(2016, 02, 04)"
-          },
-          {
-            "v": "0"
-          },
-          {
-            "v": "1"
-          }
-        ]
-      },
-      {
-        "c": [
-          {
-            "v": "Safari"
-          },
-          {
-            "v": "8.0"
-          },
-          {
-            "v": "Russia"
-          },
-          {
-            "v": "Samara"
-          },
-          {
-            "v": "/"
-          },
-          {
-            "v": "Date(2016, 02, 04)"
-          },
-          {
-            "v": "1"
-          },
-          {
-            "v": "1"
-          }
-        ]
-      },
-      {
-        "c": [
-          {
-            "v": "Safari"
-          },
-          {
-            "v": "9.0"
-          },
-          {
-            "v": "Australia"
-          },
-          {
-            "v": "Melbourne"
-          },
-          {
-            "v": "/stuff/csws.html"
-          },
-          {
-            "v": "Date(2016, 02, 04)"
-          },
-          {
-            "v": "1"
-          },
-          {
-            "v": "1"
-          }
-        ]
-      },
-      {
-        "c": [
-          {
-            "v": "Chrome"
-          },
-          {
-            "v": "48.0.2564.95"
-          },
-          {
-            "v": "United States"
-          },
-          {
-            "v": "Arlington"
-          },
-          {
-            "v": "/stuff/powerpoint-games.html"
-          },
-          {
-            "v": "Date(2016, 02, 06)"
-          },
-          {
-            "v": "1"
-          },
-          {
-            "v": "1"
-          }
-        ]
-      },
-      {
-        "c": [
-          {
-            "v": "Chrome"
-          },
-          {
-            "v": "48.0.2564.116"
-          },
-          {
-            "v": "Australia"
-          },
-          {
-            "v": "Sydney"
-          },
-          {
-            "v": "/"
-          },
-          {
-            "v": "Date(2016, 02, 08)"
-          },
-          {
-            "v": "1"
-          },
-          {
-            "v": "1"
-          }
-        ]
-      },
-      {
-        "c": [
-          {
-            "v": "Chrome"
-          },
-          {
-            "v": "48.0.2564.116"
-          },
-          {
-            "v": "Poland"
-          },
-          {
-            "v": "Murowana Goslina"
-          },
-          {
-            "v": "/"
-          },
-          {
-            "v": "Date(2016, 02, 08)"
-          },
-          {
-            "v": "1"
-          },
-          {
-            "v": "3"
-          }
-        ]
-      },
-      {
-        "c": [
-          {
-            "v": "Chrome"
-          },
-          {
-            "v": "48.0.2564.116"
-          },
-          {
-            "v": "Poland"
-          },
-          {
-            "v": "Murowana Goslina"
-          },
-          {
-            "v": "/about-me.html"
-          },
-          {
-            "v": "Date(2016, 02, 08)"
-          },
-          {
-            "v": "0"
-          },
-          {
-            "v": "1"
-          }
-        ]
-      },
-      {
-        "c": [
-          {
-            "v": "Chrome"
-          },
-          {
-            "v": "48.0.2564.116"
-          },
-          {
-            "v": "Poland"
-          },
-          {
-            "v": "Murowana Goslina"
-          },
-          {
-            "v": "/stuff/netyelp.html"
-          },
-          {
-            "v": "Date(2016, 02, 08)"
-          },
-          {
-            "v": "0"
-          },
-          {
-            "v": "1"
-          }
-        ]
-      },
-      {
-        "c": [
-          {
-            "v": "Chrome"
-          },
-          {
-            "v": "48.0.2564.116"
-          },
-          {
-            "v": "Australia"
-          },
-          {
-            "v": "Melbourne"
-          },
-          {
-            "v": "/"
-          },
-          {
-            "v": "Date(2016, 02, 09)"
-          },
-          {
-            "v": "1"
-          },
-          {
-            "v": "1"
-          }
-        ]
-      },
-      {
-        "c": [
-          {
-            "v": "Opera"
-          },
-          {
-            "v": "35.0.2066.92"
-          },
-          {
-            "v": "Norway"
-          },
-          {
-            "v": "Molde"
-          },
-          {
-            "v": "/"
-          },
-          {
-            "v": "Date(2016, 02, 09)"
-          },
-          {
-            "v": "1"
-          },
-          {
-            "v": "1"
-          }
-        ]
-      },
-      {
-        "c": [
-          {
-            "v": "Opera"
-          },
-          {
-            "v": "35.0.2066.92"
-          },
-          {
-            "v": "Norway"
-          },
-          {
-            "v": "Molde"
-          },
-          {
-            "v": "/stuff/kill-drive.html"
-          },
-          {
-            "v": "Date(2016, 02, 09)"
-          },
-          {
-            "v": "0"
-          },
-          {
-            "v": "1"
-          }
-        ]
-      },
-      {
-        "c": [
-          {
-            "v": "Opera"
-          },
-          {
-            "v": "35.0.2066.92"
-          },
-          {
-            "v": "Norway"
-          },
-          {
-            "v": "Molde"
-          },
-          {
-            "v": "/stuff/pinq.html"
-          },
-          {
-            "v": "Date(2016, 02, 09)"
-          },
-          {
-            "v": "0"
-          },
-          {
-            "v": "1"
-          }
-        ]
-      },
-      {
-        "c": [
-          {
-            "v": "Opera"
-          },
-          {
-            "v": "35.0.2066.92"
-          },
-          {
-            "v": "Norway"
-          },
-          {
-            "v": "Molde"
-          },
-          {
-            "v": "/work/iddigital-full-time.html"
-          },
-          {
-            "v": "Date(2016, 02, 09)"
-          },
-          {
-            "v": "0"
-          },
-          {
-            "v": "1"
-          }
-        ]
-      },
-      {
-        "c": [
-          {
-            "v": "Chrome"
-          },
-          {
-            "v": "48.0.2564.116"
-          },
-          {
-            "v": "Australia"
-          },
-          {
-            "v": "Melbourne"
-          },
-          {
-            "v": "/stuff/csws.html"
-          },
-          {
-            "v": "Date(2016, 02, 10)"
-          },
-          {
-            "v": "1"
-          },
-          {
-            "v": "1"
-          }
-        ]
-      },
-      {
-        "c": [
-          {
-            "v": "Firefox"
-          },
-          {
-            "v": "28.0"
-          },
-          {
-            "v": "United States"
-          },
-          {
-            "v": "New York"
-          },
-          {
-            "v": "/"
-          },
-          {
-            "v": "Date(2016, 02, 10)"
-          },
-          {
-            "v": "1"
-          },
-          {
-            "v": "1"
-          }
-        ]
-      },
-      {
-        "c": [
-          {
-            "v": "Internet Explorer"
-          },
-          {
-            "v": "9.0"
-          },
-          {
-            "v": "Germany"
-          },
-          {
-            "v": "(not set)"
-          },
-          {
-            "v": "/"
-          },
-          {
-            "v": "Date(2016, 02, 10)"
-          },
-          {
-            "v": "1"
-          },
-          {
-            "v": "1"
-          }
-        ]
-      },
-      {
-        "c": [
-          {
-            "v": "Safari"
-          },
-          {
-            "v": "9.0"
-          },
-          {
-            "v": "Australia"
-          },
-          {
-            "v": "Melbourne"
-          },
-          {
-            "v": "/stuff/calc-cas-programs.html"
-          },
-          {
-            "v": "Date(2016, 02, 10)"
-          },
-          {
-            "v": "1"
-          },
-          {
-            "v": "1"
-          }
-        ]
-      }
     ]
-  }
 }

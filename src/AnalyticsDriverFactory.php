@@ -5,6 +5,7 @@ namespace Dms\Package\Analytics;
 use Dms\Core\Exception\InvalidArgumentException;
 use Dms\Core\Util\Debug;
 use Dms\Package\Analytics\Google\GoogleAnalyticsDriver;
+use Interop\Container\ContainerInterface;
 
 /**
  * The analytics driver factory.
@@ -13,33 +14,52 @@ use Dms\Package\Analytics\Google\GoogleAnalyticsDriver;
  */
 class AnalyticsDriverFactory
 {
+    private static $drivers = [
+        'google' => GoogleAnalyticsDriver::class,
+    ];
+
+    /**
+     * @var ContainerInterface
+     */
+    private $iocContainer;
+
     /**
      * @var IAnalyticsDriver[]
      */
-    private static $drivers;
+    private $driversCache = [];
+
+    /**
+     * AnalyticsDriverFactory constructor.
+     *
+     * @param ContainerInterface $iocContainer
+     */
+    public function __construct(ContainerInterface $iocContainer)
+    {
+        $this->iocContainer = $iocContainer;
+    }
 
     /**
      * @return IAnalyticsDriver[]
      */
-    public static function getDrivers() : array
+    public function getDrivers() : array
     {
-        if (self::$drivers === null) {
-            self::$drivers = [
-                'google' => new GoogleAnalyticsDriver(),
-            ];
+        foreach (self::$drivers as $name => $driverClass) {
+            if (!isset($this->driversCache[$name])) {
+                $this->load($name);
+            }
         }
 
-        return self::$drivers;
+        return $this->driversCache;
     }
 
     /**
      * @return string[]
      */
-    public static function getDriverOptions() : array
+    public function getDriverOptions() : array
     {
         $options = [];
 
-        foreach (self::getDrivers() as $driver) {
+        foreach ($this->getDrivers() as $driver) {
             $options[$driver->getName()] = $driver->getLabel();
         }
 
@@ -47,15 +67,18 @@ class AnalyticsDriverFactory
     }
 
     /**
-     * @param IAnalyticsDriver $driver
-     *
-     * @return void
+     * @param string $name
+     * @param string $class
      */
-    public static function registerDriver(IAnalyticsDriver $driver)
+    public function registerDriver(string $name, string $class)
     {
-        self::getDrivers();
+        InvalidArgumentException::verify(
+            is_a($class, IAnalyticsDriver::class, true),
+            'Class must implement %s, %s given',
+            IAnalyticsDriver::class, $class
+        );
 
-        self::$drivers[$driver->getName()] = $driver;
+        self::$drivers[$name] = $class;
     }
 
     /**
@@ -64,16 +87,19 @@ class AnalyticsDriverFactory
      * @return IAnalyticsDriver
      * @throws InvalidArgumentException
      */
-    public static function load(string $driverName) : IAnalyticsDriver
+    public function load(string $driverName) : IAnalyticsDriver
     {
-        $drivers = self::getDrivers();
-        if (!isset($drivers[$driverName])) {
+        if (!isset(self::$drivers[$driverName])) {
             throw InvalidArgumentException::format(
                 'Invalid driver name supplied to %s: expecting one of (%s), \'%s\' given',
-                __METHOD__, Debug::formatValues(array_keys($drivers)), $driverName
+                __METHOD__, Debug::formatValues(array_keys(self::$drivers)), $driverName
             );
         }
 
-        return $drivers[$driverName];
+        if (!isset($this->driversCache[$driverName])) {
+            $this->driversCache[$driverName] = $this->iocContainer->get(self::$drivers[$driverName]);
+        }
+
+        return $this->driversCache[$driverName];
     }
 }

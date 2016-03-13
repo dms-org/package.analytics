@@ -8,6 +8,7 @@ use Dms\Package\Analytics\IAnalyticsData;
 use Dms\Package\Analytics\IAnalyticsDriver;
 use Google_Client;
 use Google_Service_Analytics;
+use Psr\Cache\CacheItemPoolInterface;
 
 /**
  * The google analytics driver
@@ -16,6 +17,21 @@ use Google_Service_Analytics;
  */
 class GoogleAnalyticsDriver implements IAnalyticsDriver
 {
+    /**
+     * @var CacheItemPoolInterface|null
+     */
+    protected $cache;
+
+    /**
+     * GoogleAnalyticsDriver constructor.
+     *
+     * @param CacheItemPoolInterface|null $cache
+     */
+    public function __construct(CacheItemPoolInterface $cache = null)
+    {
+        $this->cache = $cache;
+    }
+
     /**
      * @inheritDoc
      */
@@ -40,6 +56,20 @@ class GoogleAnalyticsDriver implements IAnalyticsDriver
         return new GoogleAnalyticsForm();
     }
 
+    public function validate(FormObject $options) : bool
+    {
+        /** @var GoogleAnalyticsForm $options */
+        InvalidArgumentException::verifyInstanceOf(__METHOD__, 'options', $options, GoogleAnalyticsForm::class);
+
+        try {
+            $this->buildApiClient($options);
+
+            return true;
+        } catch (\Exception $e) {
+            return false;
+        }
+    }
+
     /**
      * @inheritDoc
      */
@@ -48,21 +78,39 @@ class GoogleAnalyticsDriver implements IAnalyticsDriver
         /** @var GoogleAnalyticsForm $options */
         InvalidArgumentException::verifyInstanceOf(__METHOD__, 'options', $options, GoogleAnalyticsForm::class);
 
+        $client = $this->buildApiClient($options);
+
+        return new GoogleAnalyticsData(new Google_Service_Analytics($client), $options->viewId, $this->cache);
+    }
+
+    /**
+     * @param GoogleAnalyticsForm $options
+     *
+     * @return Google_Client
+     */
+    protected function buildApiClient(GoogleAnalyticsForm $options) : Google_Client
+    {
         $credentials = new \Google_Auth_AssertionCredentials(
             $options->serviceAccountEmail,
             [Google_Service_Analytics::ANALYTICS_READONLY],
-            $options->privateKeyData
+            base64_decode($options->privateKeyData)
         );
 
         $client = new Google_Client();
         $client->setApplicationName('dms.package.analytics');
+        if ($this->cache) {
+            $client->setCache(new GooglePsr6CacheAdapter($client, $this->cache));
+        }
+        $client->setAccessType('offline');
 
         $client->setAssertionCredentials($credentials);
         if ($client->getAuth()->isAccessTokenExpired()) {
             $client->getAuth()->refreshTokenWithAssertion();
+
+            return $client;
         }
 
-        return new GoogleAnalyticsData(new Google_Service_Analytics($client), $options->viewId);
+        return $client;
     }
 
     /**
@@ -74,6 +122,7 @@ class GoogleAnalyticsDriver implements IAnalyticsDriver
         InvalidArgumentException::verifyInstanceOf(__METHOD__, 'options', $options, GoogleAnalyticsForm::class);
 
         $code = json_encode($options->trackingCode);
+
         return <<<HTML
 <!-- Google Analytics -->
 <script>

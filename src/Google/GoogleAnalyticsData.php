@@ -4,17 +4,22 @@ namespace Dms\Package\Analytics\Google;
 
 use Dms\Common\Structure\DateTime\Date;
 use Dms\Common\Structure\Field;
+use Dms\Common\Structure\Geo\Chart\GeoChart;
+use Dms\Common\Structure\Geo\Country;
 use Dms\Core\Module\Definition\ModuleDefinition;
-use Dms\Core\Module\Definition\Table\TableViewDefinition;
+use Dms\Core\Module\ITableDisplay;
 use Dms\Core\Module\Table\TableDisplay;
 use Dms\Core\Table\Builder\Column;
+use Dms\Core\Table\Chart\Criteria\ChartCriteria;
 use Dms\Core\Table\Chart\DataSource\Definition\ChartTableMapperDefinition;
 use Dms\Core\Table\Chart\Structure\ChartAxis;
 use Dms\Core\Table\Chart\Structure\LineChart;
 use Dms\Core\Table\Chart\Structure\PieChart;
+use Dms\Core\Table\DataSource\ArrayTableDataSource;
 use Dms\Core\Table\DataSource\Definition\GroupedTableDefinition;
 use Dms\Package\Analytics\IAnalyticsData;
 use Google_Service_Analytics;
+use Psr\Cache\CacheItemPoolInterface;
 
 /**
  * The google analytics data class.
@@ -34,15 +39,22 @@ class GoogleAnalyticsData implements IAnalyticsData
     private $viewId;
 
     /**
+     * @var CacheItemPoolInterface
+     */
+    private $cache;
+
+    /**
      * GoogleAnalyticsData constructor.
      *
      * @param Google_Service_Analytics $client
      * @param int                      $viewId
+     * @param CacheItemPoolInterface   $cache
      */
-    public function __construct(Google_Service_Analytics $client, int $viewId)
+    public function __construct(Google_Service_Analytics $client, int $viewId, CacheItemPoolInterface $cache)
     {
         $this->client = $client;
         $this->viewId = $viewId;
+        $this->cache  = $cache;
     }
 
     /**
@@ -50,66 +62,66 @@ class GoogleAnalyticsData implements IAnalyticsData
      */
     public function registerWidgets(ModuleDefinition $module)
     {
-        $module->custom()->table(new TableDisplay(
-            'google-analytics-data',
-            new GoogleAnalyticsTableDataSource($this->client->data_ga, $this->viewId, 365),
-            []
-        ));
+        $sessionAnalyticsTable = $this->loadAnalyticsWithBreakdown(
+            'google-analytics-sessions',
+            [
+                Column::from(Field::create('date', 'Date')->date()),
+            ],
+            ['ga:date' => 'date']
+        );
 
-        $module->table('google-analytics-sessions')
-            ->fromPreviousTable('google-analytics-data')
+        $locationAnalyticsTable = $this->loadAnalyticsWithBreakdown(
+            'google-analytics-location-city-breakdown',
+            [
+                Column::name('location')->label('Location')->components([
+                    Field::create('city', 'City')->string(),
+                    Field::create('country', 'Country')->enum(Country::class, Country::getShortNameMap())->required(),
+                ])
+            ],
+            ['ga:countryIsoCode' => 'location.country', 'ga:city' => 'location.city']
+        );
+
+        $browserAnalyticsTable = $this->loadAnalyticsWithBreakdown(
+            'google-analytics-browser-version-breakdown',
+            [
+                Column::name('browser')->label('Browser')->components([
+                    Field::create('name', 'Name')->string(),
+                    Field::create('version', 'Version')->string(),
+                ])
+            ],
+            ['ga:browser' => 'browser.name', 'ga:browserVersion' => 'browser.version']
+        );
+
+        $pageAnalyticsTable = $this->loadAnalyticsWithBreakdown(
+            'google-analytics-page-breakdown',
+            [
+                Column::from(Field::create('page', 'Page')->string()),
+            ],
+            ['ga:pagePath' => 'page']
+        );
+
+        $module->custom()->table($sessionAnalyticsTable);
+        $module->custom()->table($locationAnalyticsTable);
+        $module->custom()->table($browserAnalyticsTable);
+        $module->custom()->table($pageAnalyticsTable);
+
+        $module->table('google-analytics-location-country-breakdown')
+            ->fromPreviousTable('google-analytics-location-city-breakdown')
             ->withStructure(function (GroupedTableDefinition $map) {
-                $map->groupedBy('date');
+                $map->groupedBy('location.country');
 
                 $this->mapSessionStatistics($map);
             })
-            ->withViews(function (TableViewDefinition $view) {
-                $now = Date::fromNative(new \DateTimeImmutable());
+            ->withoutViews();
 
-                $view->name('last-week', 'Last Week')
-                    ->asDefault()
-                    ->where('date', '>=', $now->subWeeks(1), true);
-
-                $view->name('last-month', 'Last Month')
-                    ->where('date', '>=', $now->subMonths(1), true);
-
-                $view->name('last-year', 'Last Year')
-                    ->where('date', '>=', $now->subYears(1), true);
-            });
-
-        $module->table('google-analytics-location-country-breakdown')
-            ->fromPreviousTable('google-analytics-data')
-            ->withStructure(function (GroupedTableDefinition $map) {
-                $map->groupedBy('location.country');
-
-                $this->mapSessionStatistics($map);
-            });
-
-        $module->table('google-analytics-location-city-breakdown')
-            ->fromPreviousTable('google-analytics-data')
-            ->withStructure(function (GroupedTableDefinition $map) {
-                $map->groupedBy('location.country');
-                $map->groupedBy('location.city');
-
-                $this->mapSessionStatistics($map);
-            });
-
-        $module->table('google-analytics-location-browser-breakdown')
-            ->fromPreviousTable('google-analytics-data')
+        $module->table('google-analytics-browser-breakdown')
+            ->fromPreviousTable('google-analytics-browser-version-breakdown')
             ->withStructure(function (GroupedTableDefinition $map) {
                 $map->groupedBy('browser.name');
 
                 $this->mapSessionStatistics($map);
-            });
-
-        $module->table('google-analytics-location-browser-version-breakdown')
-            ->fromPreviousTable('google-analytics-data')
-            ->withStructure(function (GroupedTableDefinition $map) {
-                $map->groupedBy('browser.name');
-                $map->groupedBy('browser.version');
-
-                $this->mapSessionStatistics($map);
-            });
+            })
+            ->withoutViews();
 
         $module->chart('google-analytics-sessions')
             ->fromTable('google-analytics-sessions')
@@ -121,7 +133,8 @@ class GoogleAnalyticsData implements IAnalyticsData
                         $map->column('statistics.page_views')->asComponent(),
                     ])
                 ));
-            });
+            })
+            ->withoutViews();
 
         $module->chart('google-analytics-browser-breakdown')
             ->fromTable('google-analytics-browser-breakdown')
@@ -130,7 +143,35 @@ class GoogleAnalyticsData implements IAnalyticsData
                     $map->column('browser.name')->toAxis('browser', 'Browser'),
                     $map->column('statistics.sessions')->toAxis('sessions', 'Sessions')
                 ));
+            })
+            ->withoutViews();
+
+        $module->chart('google-analytics-location-country-breakdown')
+            ->fromTable('google-analytics-location-country-breakdown')
+            ->map(function (ChartTableMapperDefinition $map) {
+                $map->structure(new GeoChart(
+                    $map->column('location.country')->toAxis('country', 'Country'),
+                    $map->column('statistics.sessions')->toAxis('sessions', 'Sessions')
+                ));
+            })
+            ->withoutViews();
+
+        $module->widget('google-analytics-sessions-last-month-chart')
+            ->label('Last month sessions')
+            ->withChart('google-analytics-sessions')
+            ->matching(function (ChartCriteria $criteria) {
+                $criteria->where('date', '>=', Date::fromNative(new \DateTimeImmutable())->subMonths(1), true);
             });
+
+        $module->widget('google-analytics-browsers-breakdown')
+            ->label('User browser breakdown')
+            ->withChart('google-analytics-browser-breakdown')
+            ->allData();
+
+        $module->widget('google-analytics-location-breakdown')
+            ->label('User location breakdown')
+            ->withChart('google-analytics-location-country-breakdown')
+            ->allData();
     }
 
     protected function mapSessionStatistics(GroupedTableDefinition $map)
@@ -142,5 +183,31 @@ class GoogleAnalyticsData implements IAnalyticsData
 
         $map->sum('statistics.sessions')->toComponent('statistics.sessions');
         $map->sum('statistics.page_views')->toComponent('statistics.page_views');
+    }
+
+    private function loadAnalyticsWithBreakdown(string $name, array $breakdownColumns, array $gaDimensionComponentIdMap) : ITableDisplay
+    {
+        $expiry     = 24 * 60 * 60;
+        $dataSource = new GoogleAnalyticsTableDataSource(
+            $this->client->data_ga,
+            $this->viewId,
+            365,
+            $breakdownColumns,
+            $gaDimensionComponentIdMap
+        );
+
+        $cacheItem = $this->cache->getItem(strtr($name, ['-' => '__']));
+
+        if (!$cacheItem->isHit()) {
+            $cacheItem->set($dataSource->load()->getSections()[0]->getRowArray());
+            $cacheItem->expiresAfter($expiry);
+
+            $this->cache->save($cacheItem);
+        }
+
+        return new TableDisplay($name, new ArrayTableDataSource(
+            $dataSource->getStructure(),
+            $cacheItem->get()
+        ), []);
     }
 }

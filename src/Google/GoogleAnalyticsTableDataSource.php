@@ -3,8 +3,10 @@
 namespace Dms\Package\Analytics\Google;
 
 use Dms\Common\Structure\DateTime\Date;
+use Dms\Common\Structure\DateTime\Form\DateType;
 use Dms\Common\Structure\Field;
 use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Form\Field\Type\EnumType;
 use Dms\Core\Form\IField;
 use Dms\Core\Model\Criteria\Condition\ConditionOperator;
 use Dms\Core\Table\Builder\Column;
@@ -15,6 +17,7 @@ use Dms\Core\Table\ITableRow;
 use Dms\Core\Table\TableStructure;
 use Dms\Core\Util\Debug;
 use Google_Service_Analytics_DataGa_Resource;
+use Google_Service_Analytics_GaData;
 
 /**
  * The google analytics table data display
@@ -48,19 +51,32 @@ class GoogleAnalyticsTableDataSource extends TableDataSource
     protected $defaultDaysAgo;
 
     /**
+     * @var array
+     */
+    private $gaDimensionComponentIdMap;
+
+    /**
      * GoogleAnalyticsTableDataSource constructor.
      *
      * @param Google_Service_Analytics_DataGa_Resource $client
      * @param int                                      $viewId
      * @param int                                      $defaultDaysAgo
+     * @param array                                    $breakdownColumns
+     * @param array                                    $gaDimensionComponentIdMap
      */
-    public function __construct(Google_Service_Analytics_DataGa_Resource $client, int $viewId, int $defaultDaysAgo)
-    {
-        parent::__construct($this->tableStructure());
+    public function __construct(
+        Google_Service_Analytics_DataGa_Resource $client,
+        int $viewId,
+        int $defaultDaysAgo,
+        array $breakdownColumns,
+        array $gaDimensionComponentIdMap
+    ) {
+        parent::__construct($this->tableStructure($breakdownColumns));
 
-        $this->client = $client;
-        $this->viewId = $viewId;
-        $this->defaultDaysAgo = $defaultDaysAgo;
+        $this->client                    = $client;
+        $this->viewId                    = $viewId;
+        $this->defaultDaysAgo            = $defaultDaysAgo;
+        $this->gaDimensionComponentIdMap = $gaDimensionComponentIdMap;
 
         foreach ($this->tableMap() as $gaColumn => $componentId) {
             list($column, $component) = $this->structure->getColumnAndComponent($componentId);
@@ -70,37 +86,21 @@ class GoogleAnalyticsTableDataSource extends TableDataSource
         }
     }
 
-    protected function tableStructure() : TableStructure
+    protected function tableStructure(array $breakdownColumns) : TableStructure
     {
-        return new TableStructure([
-            Column::from(Field::create('date', 'Date')->date()),
-            Column::name('browser')->label('Browser')->components([
-                Field::create('name', 'Name')->string(),
-                Field::create('version', 'Version')->string(),
-            ]),
-            Column::name('location')->label('Location')->components([
-                Field::create('city', 'City')->string(),
-                Field::create('country', 'Country')->string(),
-            ]),
-            Column::from(Field::create('page', 'Page')->string()),
+        return new TableStructure(array_merge([
             Column::name('statistics')->label('Statistics')->components([
                 Field::create('sessions', 'Sessions')->int(),
                 Field::create('page_views', 'Page Views')->int(),
             ]),
-        ]);
+        ], $breakdownColumns));
     }
 
     protected function tableMap() : array
     {
-        return [
-            'ga:date'           => 'date',
-            'ga:browser'        => 'browser.name',
-            'ga:browserVersion' => 'browser.version',
-            'ga:country'        => 'location.country',
-            'ga:city'           => 'location.city',
-            'ga:pagePath'       => 'page',
-            'ga:sessions'       => 'statistics.sessions',
-            'ga:pageviews'      => 'statistics.page_views',
+        return $this->gaDimensionComponentIdMap + [
+            'ga:sessions'  => 'statistics.sessions',
+            'ga:pageviews' => 'statistics.page_views',
         ];
     }
 
@@ -126,20 +126,19 @@ class GoogleAnalyticsTableDataSource extends TableDataSource
         return $this->mapDataToRows($this->loadAnalyticsDataTable($criteria));
     }
 
-    protected function loadAnalyticsDataTable(IRowCriteria $criteria = null) : array
+    protected function loadAnalyticsDataTable(IRowCriteria $criteria = null) : Google_Service_Analytics_GaData
     {
         $criteria = $criteria ?? $this->criteria()->loadAll();
 
         $this->filterOutStartAndEndDateFrom($criteria, $startDate, $endDate);
 
         $options = [
-            'dimensions'  => 'ga:date,ga:pagePath,ga:browser,ga:browserVersion,ga:city,ga:country',
-            'itemsPerPage' => 10000,
-            'start-index' => $criteria->getRowsToSkip(),
+            'dimensions'  => implode(',', array_keys($this->gaDimensionComponentIdMap)),
+            'start-index' => $criteria->getRowsToSkip() + 1,
         ];
 
-        if ($criteria->getConditionGroups()) {
-            $options['filter'] = $this->buildFilterParam($criteria);
+        if ($criteria->getConditionGroups() && $filter = $this->buildFilterParam($criteria)) {
+            $options['filters'] = $filter;
         }
         if ($criteria->getOrderings()) {
             $options['sort'] = $this->buildSortParam($criteria);
@@ -153,7 +152,7 @@ class GoogleAnalyticsTableDataSource extends TableDataSource
             'ga:' . $this->viewId,
             $startDate,
             $endDate,
-            'ga:pageviews,ga:sessionDuration,ga:sessions',
+            'ga:pageviews,ga:sessions',
             $options
         );
     }
@@ -201,12 +200,18 @@ class GoogleAnalyticsTableDataSource extends TableDataSource
             $paramGroup = [];
 
             foreach ($group->getConditions() as $condition) {
+                if ($condition->getComponentId() === 'date.date') {
+                    continue;
+                }
+
                 $paramGroup[] = $this->gaMap[$condition->getComponentId()]
                     . $this->mapOperator($condition->getOperator()->getOperator())
                     . $this->mapValue($condition->getValue());
             }
 
-            $paramGroups[] = implode($modes[$group->getConditionMode()], $paramGroup);
+            if (!empty($paramGroup)) {
+                $paramGroups[] = implode($modes[$group->getConditionMode()], $paramGroup);
+            }
         }
 
         return implode($modes[$criteria->getConditionMode()], $paramGroups);
@@ -255,7 +260,7 @@ class GoogleAnalyticsTableDataSource extends TableDataSource
         return implode(',', $sortParams);
     }
 
-    protected function mapDataToRows(array $data) : array
+    protected function mapDataToRows(Google_Service_Analytics_GaData $data) : array
     {
         $rows = [];
 
@@ -263,20 +268,20 @@ class GoogleAnalyticsTableDataSource extends TableDataSource
         $columnComponentIdMap = [];
         $columnIndexFieldMap  = [];
 
-        foreach ($data['dataTable']['cols'] as $key => $column) {
-            $columnComponentIdMap[$key] = explode('.', $this->tableMap[$column['id']]);
-            $columnIndexFieldMap[$key]  = $this->structure->getComponent($this->tableMap[$column['id']])
+        foreach ($data->getColumnHeaders() as $key => $column) {
+            $columnComponentIdMap[$key] = explode('.', $this->tableMap[$column->getName()]);
+            $columnIndexFieldMap[$key]  = $this->structure->getComponent($this->tableMap[$column->getName()])
                 ->getType()
                 ->getOperator(ConditionOperator::EQUALS)
                 ->getField();
         }
 
-        foreach ($data['dataTable']['rows'] as $row) {
+        foreach ($data->getRows() as $row) {
             $processedRow = [];
 
-            foreach ($row['c'] as $key => $value) {
+            foreach ($row as $key => $value) {
                 list($column, $component) = $columnComponentIdMap[$key];
-                $processedRow[$column][$component] = $this->transformValue($columnIndexFieldMap[$key], $value['v']);
+                $processedRow[$column][$component] = $this->transformValue($columnIndexFieldMap[$key], $value);
             }
 
             $rows[] = new TableRow($processedRow);
@@ -287,8 +292,12 @@ class GoogleAnalyticsTableDataSource extends TableDataSource
 
     protected function transformValue(IField $field, string $value)
     {
-        if (strpos($value, 'Date(') === 0) {
-            return Date::fromFormat('\D\a\t\e(Y, m, d)', $value);
+        if ($field->getType() instanceof DateType) {
+            return Date::fromFormat('Ymd', $value);
+        } elseif ($field->getType() instanceof EnumType) {
+            $class = $field->getType()->get(EnumType::ATTR_ENUM_CLASS);
+
+            return new $class($value);
         } else {
             return $field->process($value);
         }
