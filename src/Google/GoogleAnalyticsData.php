@@ -7,6 +7,7 @@ use Dms\Common\Structure\Field;
 use Dms\Common\Structure\Geo\Chart\GeoCityChart;
 use Dms\Common\Structure\Geo\Chart\GeoCountryChart;
 use Dms\Common\Structure\Geo\Country;
+use Dms\Core\Module\Definition\Chart\ChartViewDefinition;
 use Dms\Core\Module\Definition\ModuleDefinition;
 use Dms\Core\Module\ITableDisplay;
 use Dms\Core\Module\Table\TableDisplay;
@@ -160,7 +161,19 @@ class GoogleAnalyticsData implements IAnalyticsData
                     ])
                 ));
             })
-            ->withoutViews();
+            ->withViews(function (ChartViewDefinition $view) {
+                $now = Date::fromNative(new \DateTimeImmutable());
+
+                $view->name('last-week', 'Last Week')
+                    ->asDefault()
+                    ->where('date', '>=', $now->subWeeks(1), true);
+
+                $view->name('last-month', 'Last Month')
+                    ->where('date', '>=', $now->subMonths(1), true);
+
+                $view->name('last-year', 'Last Year')
+                    ->where('date', '>=', $now->subYears(1), true);
+            });;
 
         $module->chart('google-analytics-browser-breakdown')
             ->fromTable('google-analytics-browser-breakdown')
