@@ -53,10 +53,14 @@ class AnalyticsConfigModuleTest extends CrudModuleTest
     {
         $container = $this->getMockForAbstractClass(ContainerInterface::class);
 
+        $driver = $this->getMock(GoogleAnalyticsDriver::class, ['validate']);
+
+        $driver->method('validate')->willReturn(true);
+
         $container->expects(self::once())
             ->method('get')
             ->with(GoogleAnalyticsDriver::class)
-            ->willReturn(new GoogleAnalyticsDriver());
+            ->willReturn($driver);
 
         return $container;
     }

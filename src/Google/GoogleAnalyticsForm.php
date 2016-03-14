@@ -4,6 +4,7 @@ namespace Dms\Package\Analytics\Google;
 
 use Dms\Common\Structure\Field;
 use Dms\Common\Structure\FileSystem\File;
+use Dms\Common\Structure\Geo\Country;
 use Dms\Core\File\IUploadedFile;
 use Dms\Core\Form\Object\FormObjectDefinition;
 use Dms\Core\Form\Object\IndependentFormObject;
@@ -37,6 +38,16 @@ class GoogleAnalyticsForm extends IndependentFormObject
     public $trackingCode;
 
     /**
+     * @var GoogleChartMode
+     */
+    public $locationChartMode;
+
+    /**
+     * @var Country|null
+     */
+    public $mapCountry;
+
+    /**
      * Defines the structure of the form object.
      *
      * @param FormObjectDefinition $form
@@ -45,7 +56,7 @@ class GoogleAnalyticsForm extends IndependentFormObject
      */
     protected function defineForm(FormObjectDefinition $form)
     {
-        $form->section('Details', [
+        $form->section('Account Details', [
             $form->bind($this->serviceAccountEmail)->to(
                 Field::create('service_account_email', 'Service Account Email')
                     ->string()->email()->required()
@@ -64,6 +75,21 @@ class GoogleAnalyticsForm extends IndependentFormObject
             $form->bind($this->viewId)->to(
                 Field::create('view_id', 'View ID')
                     ->int()->required()
+            ),
+        ]);
+
+        $form->section('Dashboard', [
+            $form->bind($this->locationChartMode)->to(
+                Field::create('location_chart_mode', 'Analytics Map Mode')
+                    ->enum(GoogleChartMode::class, [
+                        GoogleChartMode::CITY    => 'Cities',
+                        GoogleChartMode::COUNTRY => 'Countries',
+                    ])
+            ),
+            //
+            $form->bind($this->mapCountry)->to(
+                Field::create('map_country', 'Analytics Map Country')
+                    ->enum(Country::class, Country::getShortNameMap())
             ),
         ]);
 

@@ -4,7 +4,8 @@ namespace Dms\Package\Analytics\Google;
 
 use Dms\Common\Structure\DateTime\Date;
 use Dms\Common\Structure\Field;
-use Dms\Common\Structure\Geo\Chart\GeoChart;
+use Dms\Common\Structure\Geo\Chart\GeoCityChart;
+use Dms\Common\Structure\Geo\Chart\GeoCountryChart;
 use Dms\Common\Structure\Geo\Country;
 use Dms\Core\Module\Definition\ModuleDefinition;
 use Dms\Core\Module\ITableDisplay;
@@ -44,17 +45,36 @@ class GoogleAnalyticsData implements IAnalyticsData
     private $cache;
 
     /**
+     * @var GoogleChartMode
+     */
+    private $chartMode;
+
+    /**
+     * @var Country
+     */
+    private $mapCountry;
+
+    /**
      * GoogleAnalyticsData constructor.
      *
      * @param Google_Service_Analytics $client
      * @param int                      $viewId
      * @param CacheItemPoolInterface   $cache
+     * @param GoogleChartMode          $chartMode
+     * @param Country                  $mapCountry
      */
-    public function __construct(Google_Service_Analytics $client, int $viewId, CacheItemPoolInterface $cache)
-    {
-        $this->client = $client;
-        $this->viewId = $viewId;
-        $this->cache  = $cache;
+    public function __construct(
+        Google_Service_Analytics $client,
+        int $viewId,
+        CacheItemPoolInterface $cache,
+        GoogleChartMode $chartMode,
+        Country $mapCountry = null
+    ) {
+        $this->client     = $client;
+        $this->viewId     = $viewId;
+        $this->cache      = $cache;
+        $this->chartMode  = $chartMode;
+        $this->mapCountry = $mapCountry;
     }
 
     /**
@@ -74,11 +94,17 @@ class GoogleAnalyticsData implements IAnalyticsData
             'google-analytics-location-city-breakdown',
             [
                 Column::name('location')->label('Location')->components([
-                    Field::create('city', 'City')->string(),
+                    Field::create('city', 'City')->string()->required(),
+                    Field::create('city_lat_lng', 'City Lat/Lng')->latLng()->required(),
                     Field::create('country', 'Country')->enum(Country::class, Country::getShortNameMap())->required(),
                 ])
             ],
-            ['ga:countryIsoCode' => 'location.country', 'ga:city' => 'location.city']
+            [
+                'ga:countryIsoCode' => 'location.country',
+                'ga:city'           => 'location.city',
+                'ga:latitude'       => 'location.city_lat_lng',
+                'ga:longitude'      => 'location.city_lat_lng'
+            ]
         );
 
         $browserAnalyticsTable = $this->loadAnalyticsWithBreakdown(
@@ -149,9 +175,21 @@ class GoogleAnalyticsData implements IAnalyticsData
         $module->chart('google-analytics-location-country-breakdown')
             ->fromTable('google-analytics-location-country-breakdown')
             ->map(function (ChartTableMapperDefinition $map) {
-                $map->structure(new GeoChart(
+                $map->structure(new GeoCountryChart(
                     $map->column('location.country')->toAxis('country', 'Country'),
                     $map->column('statistics.sessions')->toAxis('sessions', 'Sessions')
+                ));
+            })
+            ->withoutViews();
+
+        $module->chart('google-analytics-location-city-breakdown')
+            ->fromTable('google-analytics-location-city-breakdown')
+            ->map(function (ChartTableMapperDefinition $map) {
+                $map->structure(new GeoCityChart(
+                    $map->column('location.city')->toAxis('city', 'City'),
+                    $map->column('location.city_lat_lng')->toAxis('city_lat_lng', 'City Lat/Lng'),
+                    $map->column('statistics.sessions')->toAxis('sessions', 'Sessions'),
+                    $this->mapCountry
                 ));
             })
             ->withoutViews();
@@ -163,14 +201,14 @@ class GoogleAnalyticsData implements IAnalyticsData
                 $criteria->where('date', '>=', Date::fromNative(new \DateTimeImmutable())->subMonths(1), true);
             });
 
+        $module->widget('google-analytics-location-breakdown')
+            ->label('User location breakdown')
+            ->withChart($this->chartMode->is(GoogleChartMode::CITY) ? 'google-analytics-location-city-breakdown' : 'google-analytics-location-country-breakdown')
+            ->allData();
+
         $module->widget('google-analytics-browsers-breakdown')
             ->label('User browser breakdown')
             ->withChart('google-analytics-browser-breakdown')
-            ->allData();
-
-        $module->widget('google-analytics-location-breakdown')
-            ->label('User location breakdown')
-            ->withChart('google-analytics-location-country-breakdown')
             ->allData();
     }
 
@@ -196,7 +234,7 @@ class GoogleAnalyticsData implements IAnalyticsData
             $gaDimensionComponentIdMap
         );
 
-        $cacheItem = $this->cache->getItem(strtr($name, ['-' => '__']));
+        $cacheItem = $this->cache->getItem(strtr($name, ['-' => '__']) . '__' . $this->viewId);
 
         if (!$cacheItem->isHit()) {
             $cacheItem->set($dataSource->load()->getSections()[0]->getRowArray());

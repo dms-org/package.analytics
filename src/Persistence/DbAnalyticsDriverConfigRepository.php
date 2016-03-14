@@ -13,7 +13,7 @@ use Dms\Package\Analytics\IAnalyticsDriverConfigRepository;
  *
  * @author Elliot Levin <elliotlevin@hotmail.com>
  */
-class AnalyticsDriverConfigRepository extends DbRepository implements IAnalyticsDriverConfigRepository
+class DbAnalyticsDriverConfigRepository extends DbRepository implements IAnalyticsDriverConfigRepository
 {
     /**
      * @inheritDoc

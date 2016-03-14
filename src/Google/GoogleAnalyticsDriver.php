@@ -62,7 +62,12 @@ class GoogleAnalyticsDriver implements IAnalyticsDriver
         InvalidArgumentException::verifyInstanceOf(__METHOD__, 'options', $options, GoogleAnalyticsForm::class);
 
         try {
-            $this->buildApiClient($options);
+            (new Google_Service_Analytics($this->buildApiClient($options)))->data_ga->get(
+                'ga:' . $options->viewId,
+                'today',
+                'today',
+                'ga:sessions'
+            );
 
             return true;
         } catch (\Exception $e) {
@@ -80,7 +85,7 @@ class GoogleAnalyticsDriver implements IAnalyticsDriver
 
         $client = $this->buildApiClient($options);
 
-        return new GoogleAnalyticsData(new Google_Service_Analytics($client), $options->viewId, $this->cache);
+        return new GoogleAnalyticsData(new Google_Service_Analytics($client), $options->viewId, $this->cache, $options->locationChartMode, $options->mapCountry);
     }
 
     /**

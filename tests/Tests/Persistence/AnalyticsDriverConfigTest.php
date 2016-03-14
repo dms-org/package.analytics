@@ -3,13 +3,16 @@
 namespace Dms\Package\Analytics\Tests\Persistence;
 
 use Dms\Common\Structure\FileSystem\File;
+use Dms\Common\Structure\FileSystem\UploadAction;
+use Dms\Common\Structure\Geo\Country;
 use Dms\Core\File\UploadedFileProxy;
 use Dms\Core\Persistence\Db\Mapping\IOrm;
 use Dms\Core\Tests\Persistence\Db\Integration\Mapping\DbIntegrationTest;
 use Dms\Package\Analytics\AnalyticsDriverConfig;
 use Dms\Package\Analytics\Google\GoogleAnalyticsForm;
-use Dms\Package\Analytics\Persistence\AnalyticsDriverConfigRepository;
+use Dms\Package\Analytics\Google\GoogleChartMode;
 use Dms\Package\Analytics\Persistence\AnalyticsOrm;
+use Dms\Package\Analytics\Persistence\DbAnalyticsDriverConfigRepository;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>
@@ -27,7 +30,7 @@ class AnalyticsDriverConfigTest extends DbIntegrationTest
     public function setUp()
     {
         parent::setUp();
-        $this->repo = new AnalyticsDriverConfigRepository($this->connection, $this->orm);
+        $this->repo = new DbAnalyticsDriverConfigRepository($this->connection, $this->orm);
     }
 
     public function testPersistence()
@@ -35,10 +38,12 @@ class AnalyticsDriverConfigTest extends DbIntegrationTest
         $driverConfig = new AnalyticsDriverConfig('google', GoogleAnalyticsForm::build([
             'service_account_email' => 'some@email.com',
             'private_key_data'      => [
-                'file'   => new UploadedFileProxy(File::createInMemory('abc123')),
+                'file'   => new UploadedFileProxy($file = File::createInMemory('abc123')),
                 'action' => 'store-new',
             ],
             'view_id'               => 123456,
+            'location_chart_mode'   => GoogleChartMode::COUNTRY,
+            'map_country'           => Country::AU,
             'tracking_code'         => 'UA-XXXXXX-Y',
         ]));
 
@@ -51,8 +56,17 @@ class AnalyticsDriverConfigTest extends DbIntegrationTest
                     'driver'  => 'google',
                     'options' => json_encode([
                         'service_account_email' => 'some@email.com',
-                        'private_key_data'      => base64_encode('abc123'),
+                        'private_key_data'      => [
+                            'file'   => [
+                                '__is_proxy'         => true,
+                                '__file_path'        => $file->getFullPath(),
+                                '__file_client_name' => 'key.p12',
+                            ],
+                            'action' => UploadAction::STORE_NEW,
+                        ],
                         'view_id'               => 123456,
+                        'location_chart_mode'   => GoogleChartMode::COUNTRY,
+                        'map_country'           => Country::AU,
                         'tracking_code'         => 'UA-XXXXXX-Y',
                         '__class'               => GoogleAnalyticsForm::class,
                     ])

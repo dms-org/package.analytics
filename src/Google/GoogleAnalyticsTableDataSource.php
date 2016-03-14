@@ -5,6 +5,8 @@ namespace Dms\Package\Analytics\Google;
 use Dms\Common\Structure\DateTime\Date;
 use Dms\Common\Structure\DateTime\Form\DateType;
 use Dms\Common\Structure\Field;
+use Dms\Common\Structure\Geo\Form\LatLngType;
+use Dms\Common\Structure\Geo\LatLng;
 use Dms\Core\Exception\InvalidArgumentException;
 use Dms\Core\Form\Field\Type\EnumType;
 use Dms\Core\Form\IField;
@@ -267,8 +269,10 @@ class GoogleAnalyticsTableDataSource extends TableDataSource
         /** @var IField[] $columnIndexFieldMap */
         $columnComponentIdMap = [];
         $columnIndexFieldMap  = [];
+        $gaIndexMap           = [];
 
         foreach ($data->getColumnHeaders() as $key => $column) {
+            $gaIndexMap[$column->getName()] = $key;
             $columnComponentIdMap[$key] = explode('.', $this->tableMap[$column->getName()]);
             $columnIndexFieldMap[$key]  = $this->structure->getComponent($this->tableMap[$column->getName()])
                 ->getType()
@@ -281,7 +285,7 @@ class GoogleAnalyticsTableDataSource extends TableDataSource
 
             foreach ($row as $key => $value) {
                 list($column, $component) = $columnComponentIdMap[$key];
-                $processedRow[$column][$component] = $this->transformValue($columnIndexFieldMap[$key], $value);
+                $processedRow[$column][$component] = $this->transformValue($columnIndexFieldMap[$key], $value, $row, $gaIndexMap);
             }
 
             $rows[] = new TableRow($processedRow);
@@ -290,9 +294,11 @@ class GoogleAnalyticsTableDataSource extends TableDataSource
         return $rows;
     }
 
-    protected function transformValue(IField $field, string $value)
+    protected function transformValue(IField $field, string $value, array $row, array $gaIndexMap)
     {
-        if ($field->getType() instanceof DateType) {
+        if ($field->getType() instanceof LatLngType) {
+            return new LatLng((float)$row[$gaIndexMap['ga:latitude']], (float)$row[$gaIndexMap['ga:longitude']]);
+        } elseif ($field->getType() instanceof DateType) {
             return Date::fromFormat('Ymd', $value);
         } elseif ($field->getType() instanceof EnumType) {
             $class = $field->getType()->get(EnumType::ATTR_ENUM_CLASS);

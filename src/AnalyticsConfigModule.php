@@ -69,10 +69,12 @@ class AnalyticsConfigModule extends CrudModule
 
                     $form->continueSection([
                         $form->field(
-                            Field::create('options', 'Options')->form($optionsForm)->required()
+                            Field::create('options', 'Options')
+                                ->form($optionsForm)
+                                ->required()
                                 ->assert(function (FormObject $options) use ($input) {
                                     return $this->driverFactory->load($input['type'])->validate($options);
-                                })
+                                }, 'package.analytics::validation.api-details-failure')
                         )->bindToProperty(AnalyticsDriverConfig::OPTIONS)
                     ]);
                 });
