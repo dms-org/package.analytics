@@ -49,6 +49,22 @@ class GoogleAnalyticsDriver implements IAnalyticsDriver
     }
 
     /**
+     * @return null|CacheItemPoolInterface
+     */
+    public function getCache() : CacheItemPoolInterface
+    {
+        return $this->cache;
+    }
+
+    /**
+     * @param CacheItemPoolInterface $cache
+     */
+    public function setCache(CacheItemPoolInterface $cache)
+    {
+        $this->cache = $cache;
+    }
+
+    /**
      * @inheritDoc
      */
     public function getOptionsForm() : FormObject

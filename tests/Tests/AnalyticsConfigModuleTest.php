@@ -3,11 +3,13 @@
 namespace Dms\Package\Analytics\Tests;
 
 use Dms\Common\Structure\FileSystem\File;
+use Dms\Common\Structure\FileSystem\InMemoryFile;
 use Dms\Core\Auth\IPermission;
 use Dms\Core\Auth\Permission;
 use Dms\Core\Common\Crud\Action\Object\IObjectAction;
 use Dms\Core\Common\Crud\ICrudModule;
 use Dms\Core\File\UploadedFileProxy;
+use Dms\Core\Ioc\IIocContainer;
 use Dms\Core\Model\IMutableObjectSet;
 use Dms\Core\Persistence\ArrayRepository;
 use Dms\Core\Tests\Common\Crud\Modules\CrudModuleTest;
@@ -51,7 +53,7 @@ class AnalyticsConfigModuleTest extends CrudModuleTest
 
     protected function mockIocContainer() : ContainerInterface
     {
-        $container = $this->getMockForAbstractClass(ContainerInterface::class);
+        $container = $this->getMockForAbstractClass(IIocContainer::class);
 
         $driver = $this->getMock(GoogleAnalyticsDriver::class, ['validate']);
 
@@ -102,7 +104,7 @@ class AnalyticsConfigModuleTest extends CrudModuleTest
             'options' => [
                 'service_account_email' => 'some@email.com',
                 'private_key_data'      => [
-                    'file'   => new UploadedFileProxy(File::createInMemory('abc123')),
+                    'file'   => new UploadedFileProxy(new InMemoryFile('abc123', 'key.p12')),
                     'action' => 'store-new',
                 ],
                 'view_id'               => 123456,
@@ -113,7 +115,7 @@ class AnalyticsConfigModuleTest extends CrudModuleTest
         $driverConfig = new AnalyticsDriverConfig('google', GoogleAnalyticsForm::build([
             'service_account_email' => 'some@email.com',
             'private_key_data'      => [
-                'file'   => new UploadedFileProxy(File::createInMemory('abc123')),
+                'file'   => new UploadedFileProxy(new InMemoryFile('abc123', 'key.p12')),
                 'action' => 'store-new',
             ],
             'view_id'               => 123456,
@@ -138,7 +140,7 @@ class AnalyticsConfigModuleTest extends CrudModuleTest
             'options' => GoogleAnalyticsForm::build([
                 'service_account_email' => 'some@email.com',
                 'private_key_data'      => [
-                    'file'   => new UploadedFileProxy(File::createInMemory('abc123')),
+                    'file'   => new UploadedFileProxy(new InMemoryFile('abc123', 'key.p12')),
                     'action' => 'store-new',
                 ],
                 'view_id'               => 123456,

@@ -3,9 +3,9 @@
 namespace Dms\Package\Analytics;
 
 use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Ioc\IIocContainer;
 use Dms\Core\Util\Debug;
 use Dms\Package\Analytics\Google\GoogleAnalyticsDriver;
-use Interop\Container\ContainerInterface;
 
 /**
  * The analytics driver factory.
@@ -19,7 +19,7 @@ class AnalyticsDriverFactory
     ];
 
     /**
-     * @var ContainerInterface
+     * @var IIocContainer
      */
     private $iocContainer;
 
@@ -31,9 +31,9 @@ class AnalyticsDriverFactory
     /**
      * AnalyticsDriverFactory constructor.
      *
-     * @param ContainerInterface $iocContainer
+     * @param IIocContainer $iocContainer
      */
-    public function __construct(ContainerInterface $iocContainer)
+    public function __construct(IIocContainer $iocContainer)
     {
         $this->iocContainer = $iocContainer;
     }

@@ -9,6 +9,9 @@ use Dms\Core\Common\Crud\Definition\CrudModuleDefinition;
 use Dms\Core\Common\Crud\Definition\Form\CrudFormDefinition;
 use Dms\Core\Common\Crud\Definition\Table\SummaryTableDefinition;
 use Dms\Core\Form\Object\FormObject;
+use Dms\Core\Ioc\IIocContainer;
+use Dms\Core\Module\Definition\ModuleDefinition;
+use Psr\Cache\CacheItemPoolInterface;
 
 /**
  * The analytics configuration module
@@ -55,6 +58,22 @@ class AnalyticsConfigModule extends CrudModule
         $module->labelObjects()->fromCallback(function (AnalyticsDriverConfig $driverConfig) {
             return $this->driverFactory->load($driverConfig->driverName)->getLabel();
         });
+
+        $module->action('refresh-analytics-data')
+            ->authorize(self::VIEW_PERMISSION)
+            ->handler(function () {
+                foreach ($this->dataSource->getAll() as $driverConfig) {
+                    $driver = $this->driverFactory->load($driverConfig->driverName);
+
+                    $originalCache = $driver->getCache();
+                    $driver->setCache(new WriteOnlyCachePoolDecorator($originalCache));
+
+                    $driver->getAnalyticsData($driverConfig->options)
+                        ->registerWidgets(new ModuleDefinition($this->authSystem));
+
+                    $driver->setCache($originalCache);
+                }
+            });
 
         $module->crudForm(function (CrudFormDefinition $form) {
             $form->section('Details', [

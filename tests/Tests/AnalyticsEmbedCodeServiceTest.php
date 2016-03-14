@@ -3,6 +3,7 @@
 namespace Dms\Package\Analytics\Tests;
 
 use Dms\Common\Structure\FileSystem\File;
+use Dms\Common\Structure\FileSystem\InMemoryFile;
 use Dms\Common\Testing\CmsTestCase;
 use Dms\Core\File\UploadedFileProxy;
 use Dms\Core\Persistence\ArrayRepository;
@@ -24,7 +25,7 @@ class AnalyticsEmbedCodeServiceTest extends CmsTestCase
             new AnalyticsDriverConfig('google', GoogleAnalyticsForm::build([
                 'service_account_email' => 'some@email.com',
                 'private_key_data'      => [
-                    'file' => new UploadedFileProxy(File::createInMemory('abc123')),
+                    'file' => new UploadedFileProxy(new InMemoryFile('abc123', 'some-name.p12')),
                     'action' => 'store-new',
                 ],
                 'view_id'               => 123456,

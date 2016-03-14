@@ -3,6 +3,7 @@
 namespace Dms\Package\Analytics;
 
 use Dms\Core\Form\Object\FormObject;
+use Psr\Cache\CacheItemPoolInterface;
 
 /**
  * The analytics driver interface.
@@ -24,6 +25,22 @@ interface IAnalyticsDriver
      * @return string
      */
     public function getLabel() : string;
+
+    /**
+     * Gets the cache.
+     *
+     * @return CacheItemPoolInterface
+     */
+    public function getCache() : CacheItemPoolInterface;
+
+    /**
+     * Sets the cache.
+     *
+     * @param CacheItemPoolInterface $cache
+     *
+     * @return void
+     */
+    public function setCache(CacheItemPoolInterface $cache);
 
     /**
      * Gets the options form for the providing the required data
