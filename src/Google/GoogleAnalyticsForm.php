@@ -4,6 +4,7 @@ namespace Dms\Package\Analytics\Google;
 
 use Dms\Common\Structure\Field;
 use Dms\Common\Structure\FileSystem\File;
+use Dms\Common\Structure\FileSystem\InMemoryFile;
 use Dms\Common\Structure\Geo\Country;
 use Dms\Core\File\IUploadedFile;
 use Dms\Core\Form\Object\FormObjectDefinition;
@@ -65,10 +66,11 @@ class GoogleAnalyticsForm extends IndependentFormObject
             $form->bind($this->privateKeyData)->to(
                 Field::create('private_key_data', 'Private Key (*.p12)')
                     ->file()->required()
+                    ->extension('p12')
                     ->map(function (IUploadedFile $file) {
                         return base64_encode(file_get_contents($file->getFullPath()));
                     }, function (string $data) {
-                        return File::createInMemory(base64_decode($data), 'key.p12');
+                        return new InMemoryFile(base64_decode($data), 'key.p12');
                     }, Type::string())
             ),
             //

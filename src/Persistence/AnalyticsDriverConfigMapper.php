@@ -3,6 +3,7 @@
 namespace Dms\Package\Analytics\Persistence;
 
 use Dms\Common\Structure\FileSystem\File;
+use Dms\Common\Structure\FileSystem\InMemoryFile;
 use Dms\Core\File\IFile;
 use Dms\Core\File\UploadedFileProxy;
 use Dms\Core\Form\Object\FormObject;
@@ -69,7 +70,11 @@ class AnalyticsDriverConfigMapper extends EntityMapper
         foreach ($data as $key => $value) {
             if (is_array($value)) {
                 if (isset($value['__file_path'])) {
-                    $file = new File($value['__file_path'], $value['__file_client_name'] ?? null);
+                    if (strpos($value['__file_path'], 'data://') === 0) {
+                        $file = new InMemoryFile(file_get_contents($value['__file_path']), $value['__file_client_name']);
+                    } else {
+                        $file = new File($value['__file_path'], $value['__file_client_name'] ?? null);
+                    }
 
                     $data[$key] = $value['__is_proxy'] ? new UploadedFileProxy($file) : $file;
                 } else {
