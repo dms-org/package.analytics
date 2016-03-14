@@ -43,6 +43,10 @@ class AnalyticsPackage extends Package
     {
         $package->name('analytics');
 
+        $package->metadata([
+            'icon' => 'globe'
+        ]);
+
         $package->dashboard()
             ->widgets(['config.*']);
 

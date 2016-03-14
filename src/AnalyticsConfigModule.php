@@ -48,6 +48,10 @@ class AnalyticsConfigModule extends CrudModule
     {
         $module->name('config');
 
+        $module->metadata([
+            'icon' => 'cog'
+        ]);
+
         $module->labelObjects()->fromCallback(function (AnalyticsDriverConfig $driverConfig) {
             return $this->driverFactory->load($driverConfig->driverName)->getLabel();
         });
