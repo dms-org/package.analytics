@@ -280,7 +280,7 @@ class GoogleAnalyticsTableDataSource extends TableDataSource
                 ->getField();
         }
 
-        foreach ($data->getRows() as $row) {
+        foreach ($data->getRows() ?: [] as $row) {
             $processedRow = [];
 
             foreach ($row as $key => $value) {

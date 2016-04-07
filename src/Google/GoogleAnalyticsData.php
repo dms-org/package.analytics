@@ -250,7 +250,8 @@ class GoogleAnalyticsData implements IAnalyticsData
         $cacheItem = $this->cache->getItem(strtr($name, ['-' => '__']) . '__' . $this->viewId);
 
         if (!$cacheItem->isHit()) {
-            $cacheItem->set($dataSource->load()->getSections()[0]->getRowArray());
+            $dataTable = $dataSource->load();
+            $cacheItem->set(isset($dataTable->getSections()[0]) ? $dataTable->getSections()[0]->getRowArray() : []);
             $cacheItem->expiresAfter($expiry);
 
             $this->cache->save($cacheItem);
