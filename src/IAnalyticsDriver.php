@@ -2,6 +2,7 @@
 
 namespace Dms\Package\Analytics;
 
+use Dms\Common\Structure\Web\Html;
 use Dms\Core\Form\Object\FormObject;
 use Psr\Cache\CacheItemPoolInterface;
 
@@ -25,6 +26,13 @@ interface IAnalyticsDriver
      * @return string
      */
     public function getLabel() : string;
+
+    /**
+     * Gets the installation instructions.
+     *
+     * @return Html
+     */
+    public function getInstallationInstructions() : Html;
 
     /**
      * Gets the cache.

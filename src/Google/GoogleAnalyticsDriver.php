@@ -2,6 +2,7 @@
 
 namespace Dms\Package\Analytics\Google;
 
+use Dms\Common\Structure\Web\Html;
 use Dms\Core\Exception\InvalidArgumentException;
 use Dms\Core\Form\Object\FormObject;
 use Dms\Package\Analytics\IAnalyticsData;
@@ -46,6 +47,31 @@ class GoogleAnalyticsDriver implements IAnalyticsDriver
     public function getLabel() : string
     {
         return 'Google Analytics';
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getInstallationInstructions() : Html
+    {
+        return new Html(<<<HTML
+<p>This assumes you have a Google Analytics account set up for this site.</p>
+
+<p>Create a project for this site (if one does not exist) under the <a href="https://console.developers.google.com/" target="_blank">google developer console</a>.</p>
+
+<p>In the overview, go to "Analytics API" and click "Enable"</p>
+
+<p>Under the credentials page create a "service account key" and ensure you select "New service account" and choose the *.p12 file format.</p>
+
+<p>You will have to store the service account email and the private key (*.p12 file) and upload them here.</p>
+
+<p>Now in <a href="https://analytics.google.com/" target="_blank">Google Analytics</a>, go to the "Admin" tab, select "View Settings" and copy the "View ID" here.</p>
+
+<p>Under "User Management" enter the service account's email with "Read and Analyse" permissions and click "Add".</p>
+
+<p>Now you should be able to complete this form.</p>
+HTML
+        );
     }
 
     /**

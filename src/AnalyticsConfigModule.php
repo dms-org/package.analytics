@@ -9,9 +9,7 @@ use Dms\Core\Common\Crud\Definition\CrudModuleDefinition;
 use Dms\Core\Common\Crud\Definition\Form\CrudFormDefinition;
 use Dms\Core\Common\Crud\Definition\Table\SummaryTableDefinition;
 use Dms\Core\Form\Object\FormObject;
-use Dms\Core\Ioc\IIocContainer;
 use Dms\Core\Module\Definition\ModuleDefinition;
-use Psr\Cache\CacheItemPoolInterface;
 
 /**
  * The analytics configuration module
@@ -52,7 +50,7 @@ class AnalyticsConfigModule extends CrudModule
         $module->name('config');
 
         $module->metadata([
-            'icon' => 'cog'
+            'icon' => 'cog',
         ]);
 
         $module->labelObjects()->fromCallback(function (AnalyticsDriverConfig $driverConfig) {
@@ -79,15 +77,24 @@ class AnalyticsConfigModule extends CrudModule
             $form->section('Details', [
                 $form->field(
                     Field::create('type', 'Type')->string()->oneOf($this->driverFactory->getDriverOptions())->required()
-                )->bindToProperty(AnalyticsDriverConfig::DRIVER_NAME)
+                )->bindToProperty(AnalyticsDriverConfig::DRIVER_NAME),
             ]);
 
             $form->dependentOn(['type'],
                 function (CrudFormDefinition $form, array $input, AnalyticsDriverConfig $driverConfig = null) {
+                    $analyticsDriver = $this->driverFactory->load($input['type']);
+
+                    $form->continueSection([
+                        $form->field(
+                            Field::create('installation_instructions', 'Installation Instructions')
+                                ->html()->readonly()->value($analyticsDriver->getInstallationInstructions())
+                        )->withoutBinding(),
+                    ]);
+
                     if ($driverConfig && $driverConfig->driverName === $input['type']) {
                         $optionsForm = $driverConfig->options;
                     } else {
-                        $optionsForm = $this->driverFactory->load($input['type'])->getOptionsForm();
+                        $optionsForm = $analyticsDriver->getOptionsForm();
                     }
 
                     $form->continueSection([
@@ -95,10 +102,10 @@ class AnalyticsConfigModule extends CrudModule
                             Field::create('options', 'Options')
                                 ->form($optionsForm)
                                 ->required()
-                                ->assert(function (FormObject $options) use ($input) {
-                                    return $this->driverFactory->load($input['type'])->validate($options);
+                                ->assert(function (FormObject $options) use ($analyticsDriver, $input) {
+                                    return $analyticsDriver->validate($options);
                                 }, 'package.analytics::validation.api-details-failure')
-                        )->bindToProperty(AnalyticsDriverConfig::OPTIONS)
+                        )->bindToProperty(AnalyticsDriverConfig::OPTIONS),
                     ]);
                 });
         });

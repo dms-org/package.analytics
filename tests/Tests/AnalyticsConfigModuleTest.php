@@ -137,6 +137,7 @@ class AnalyticsConfigModuleTest extends CrudModuleTest
 
         $this->assertSame(['type' => 'google'], $form->getFormForStage(1, [])->getInitialValues());
         $this->assertEquals([
+            'installation_instructions' => (new GoogleAnalyticsDriver())->getInstallationInstructions(),
             'options' => GoogleAnalyticsForm::build([
                 'service_account_email' => 'some@email.com',
                 'private_key_data'      => [
