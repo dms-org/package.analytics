@@ -303,7 +303,11 @@ class GoogleAnalyticsTableDataSource extends TableDataSource
         } elseif ($field->getType() instanceof EnumType) {
             $class = $field->getType()->get(EnumType::ATTR_ENUM_CLASS);
 
-            return new $class($value);
+            if ($class::isValid($value)) {
+                return new $class($value);
+            } else {
+                return null;
+            }
         } else {
             return $field->process($value);
         }
