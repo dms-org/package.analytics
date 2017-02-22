@@ -32,7 +32,7 @@ class GoogleAnalyticsTableDataSourceTest extends CmsTestCase
 
     public function setUp()
     {
-        $this->clientMock   = $this->getMockWithoutInvokingTheOriginalConstructor(Google_Service_Analytics_DataGa_Resource::class, ['get']);
+        $this->clientMock   = $this->createMock(Google_Service_Analytics_DataGa_Resource::class);
         $this->responseData = new Google_Service_Analytics_GaData(json_decode(file_get_contents(__DIR__ . '/data/response.json'), true));
 
         $this->dataSource = new GoogleAnalyticsTableDataSource($this->clientMock, 123456, 365, [
