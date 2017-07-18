@@ -1,6 +1,7 @@
 {
-    "name": "dms/package.analytics",
-    "description": "The website analytics package",
+    "name": "dms-org/package.analytics",
+    "description": "The analytics package for the DMS",
+    "license": "MIT",
     "authors": [
         {
             "name": "Elliot Levin",
@@ -8,12 +9,6 @@
         }
     ],
     "minimum-stability": "stable",
-    "repositories": [
-        {
-            "type": "composer",
-            "url": "https://api.package.studio/meta/composer"
-        }
-    ],
     "autoload": {
         "psr-4": {
             "Dms\\Package\\Analytics\\": "./src/"
@@ -21,17 +16,17 @@
     },
     "require": {
         "php": ">=7.0.0",
-        "dms/core": "^0.1",
-        "dms/common.structure": "^0.1",
+        "dms-org/core": "^0.8",
+        "dms-org/common.structure": "^0.8",
         "google/apiclient": "^1.1"
     },
     "autoload-dev": {
         "psr-4": {
             "Dms\\Package\\Analytics\\Tests\\": "./tests/Tests/",
-            "Dms\\Core\\Tests\\": "./vendor/dms/core/tests/Tests/"
+            "Dms\\Core\\Tests\\": "./vendor/dms-org/core/tests/Tests/"
         }
     },
     "require-dev": {
-        "dms/common.testing": "dev-master"
+        "dms-org/common.testing": "dev-master"
     }
 }

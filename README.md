@@ -10,6 +10,5 @@ Implemented drivers:
 Links
 =====
 
- - [Documentation](./docs/)
  - [Source](./src/)
  - [Tests](./tests/)
