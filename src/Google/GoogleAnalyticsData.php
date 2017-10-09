@@ -97,7 +97,7 @@ class GoogleAnalyticsData implements IAnalyticsData
                 Column::name('location')->label('Location')->components([
                     Field::create('city', 'City')->string()->required(),
                     Field::create('city_lat_lng', 'City Lat/Lng')->latLng()->required(),
-                    Field::create('country', 'Country')->enum(Country::class, Country::getShortNameMap())->required(),
+                    Field::create('country', 'Country')->enum(Country::class, Country::getNameMap())->required(),
                 ])
             ],
             [

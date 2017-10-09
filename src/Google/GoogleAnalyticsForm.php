@@ -91,7 +91,7 @@ class GoogleAnalyticsForm extends IndependentFormObject
             //
             $form->bind($this->mapCountry)->to(
                 Field::create('map_country', 'Analytics Map Country')
-                    ->enum(Country::class, Country::getShortNameMap())
+                    ->enum(Country::class, Country::getNameMap())
             ),
         ]);
 
