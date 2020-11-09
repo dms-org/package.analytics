@@ -7,7 +7,7 @@ use Dms\Common\Testing\CmsTestCase;
 use Dms\Core\Table\Builder\Column;
 use Dms\Core\Table\ITableRow;
 use Dms\Package\Analytics\Google\GoogleAnalyticsTableDataSource;
-use Google_Service_Analytics_DataGa_Resource;
+use Google_Service_Analytics_Resource_DataGa;
 use Google_Service_Analytics_GaData;
 
 /**
@@ -30,9 +30,9 @@ class GoogleAnalyticsTableDataSourceTest extends CmsTestCase
      */
     protected $dataSource;
 
-    public function setUp()
+    public function setUp(): void
     {
-        $this->clientMock   = $this->createMock(Google_Service_Analytics_DataGa_Resource::class);
+        $this->clientMock   = $this->createMock(Google_Service_Analytics_Resource_DataGa::class);
         $this->responseData = new Google_Service_Analytics_GaData(json_decode(file_get_contents(__DIR__ . '/data/response.json'), true));
 
         $this->dataSource = new GoogleAnalyticsTableDataSource($this->clientMock, 123456, 365, [

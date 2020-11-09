@@ -18,7 +18,7 @@ use Dms\Core\Table\IRowCriteria;
 use Dms\Core\Table\ITableRow;
 use Dms\Core\Table\TableStructure;
 use Dms\Core\Util\Debug;
-use Google_Service_Analytics_DataGa_Resource;
+use Google_Service_Analytics_Resource_DataGa;
 use Google_Service_Analytics_GaData;
 
 /**
@@ -29,7 +29,7 @@ use Google_Service_Analytics_GaData;
 class GoogleAnalyticsTableDataSource extends TableDataSource
 {
     /**
-     * @var Google_Service_Analytics_DataGa_Resource
+     * @var Resource
      */
     protected $client;
     /**
@@ -60,14 +60,14 @@ class GoogleAnalyticsTableDataSource extends TableDataSource
     /**
      * GoogleAnalyticsTableDataSource constructor.
      *
-     * @param Google_Service_Analytics_DataGa_Resource $client
+     * @param Google_Service_Analytics_Resource_DataGa $client
      * @param int                                      $viewId
      * @param int                                      $defaultDaysAgo
      * @param array                                    $breakdownColumns
      * @param array                                    $gaDimensionComponentIdMap
      */
     public function __construct(
-        Google_Service_Analytics_DataGa_Resource $client,
+        Google_Service_Analytics_Resource_DataGa $client,
         int $viewId,
         int $defaultDaysAgo,
         array $breakdownColumns,

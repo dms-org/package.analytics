@@ -16,8 +16,8 @@
     },
     "require": {
         "php": ">=7.0.0",
-        "dms-org/core": "^0.8",
-        "dms-org/common.structure": "^0.8",
+        "dms-org/core": "dev-upgrade",
+        "dms-org/common.structure": "dev-upgrade",
         "google/apiclient": "^2.7"
     },
     "autoload-dev": {
@@ -27,6 +27,6 @@
         }
     },
     "require-dev": {
-        "dms-org/common.testing": "dev-master"
+        "dms-org/common.testing": "dev-upgrade"
     }
 }

@@ -16,7 +16,7 @@ class GoogleAnalyticsDriverTest extends CmsTestCase
      */
     protected $driver;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->driver = new GoogleAnalyticsDriver();
     }
@@ -35,6 +35,6 @@ class GoogleAnalyticsDriverTest extends CmsTestCase
         $form = $this->driver->getOptionsForm();
         $form->trackingCode = 'UA-234343-Y';
 
-        $this->assertContains('UA-234343-Y', $this->driver->getEmbedCode($form));
+        $this->assertStringContainsString('UA-234343-Y', $this->driver->getEmbedCode($form));
     }
 }

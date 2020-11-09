@@ -43,6 +43,6 @@ class AnalyticsEmbedCodeServiceTest extends CmsTestCase
     {
         $service = new AnalyticsEmbedCodeService($this->dataSource(), new AnalyticsDriverFactory(new MockingIocContainer($this)));
 
-        $this->assertContains('UA-XXXXXX-Y', $service->getEmbedCode());
+        $this->assertStringContainsString('UA-XXXXXX-Y', $service->getEmbedCode());
     }
 }

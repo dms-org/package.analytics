@@ -28,7 +28,7 @@ class AnalyticsDriverConfigTest extends DbIntegrationTest
         return new AnalyticsOrm();
     }
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->repo = new DbAnalyticsDriverConfigRepository($this->connection, $this->orm);
