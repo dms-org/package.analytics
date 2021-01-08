@@ -37,9 +37,8 @@ class AnalyticsDriverConfigTest extends DbIntegrationTest
     public function testPersistence()
     {
         $driverConfig = new AnalyticsDriverConfig('google', GoogleAnalyticsForm::build([
-            'service_account_email' => 'some@email.com',
-            'private_key_data'      => [
-                'file'   => new UploadedFileProxy($file = new InMemoryFile('abc123', 'some-name.p12')),
+            'service_account_key'      => [
+                'file' => new UploadedFileProxy($file = new InMemoryFile('abc123', 'some-name.json')),
                 'action' => 'store-new',
             ],
             'view_id'               => 123456,
@@ -56,12 +55,11 @@ class AnalyticsDriverConfigTest extends DbIntegrationTest
                     'id'      => 1,
                     'driver'  => 'google',
                     'options' => json_encode([
-                        'service_account_email' => 'some@email.com',
-                        'private_key_data'      => [
+                        'service_account_key'      => [
                             'file'   => [
                                 '__is_proxy'         => true,
                                 '__file_path'        => $file->getFullPath(),
-                                '__file_client_name' => 'key.p12',
+                                '__file_client_name' => 'key.json',
                             ],
                             'action' => UploadAction::STORE_NEW,
                         ],

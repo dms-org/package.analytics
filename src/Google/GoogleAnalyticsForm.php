@@ -21,12 +21,7 @@ class GoogleAnalyticsForm extends IndependentFormObject
     /**
      * @var string
      */
-    public $serviceAccountEmail;
-
-    /**
-     * @var string
-     */
-    public $privateKeyData;
+    public $jsonServiceAccountKey;
 
     /**
      * @var int
@@ -58,19 +53,14 @@ class GoogleAnalyticsForm extends IndependentFormObject
     protected function defineForm(FormObjectDefinition $form)
     {
         $form->section('Account Details', [
-            $form->bind($this->serviceAccountEmail)->to(
-                Field::create('service_account_email', 'Service Account Email')
-                    ->string()->email()->required()
-            ),
-            //
-            $form->bind($this->privateKeyData)->to(
-                Field::create('private_key_data', 'Private Key (*.p12)')
+            $form->bind($this->jsonServiceAccountKey)->to(
+                Field::create('service_account_key', 'Service Account Key (*.json)')
                     ->file()->required()
-                    ->extension('p12')
+                    ->extension('json')
                     ->map(function (IUploadedFile $file) {
-                        return base64_encode(file_get_contents($file->getFullPath()));
+                        return file_get_contents($file->getFullPath());
                     }, function (string $data) {
-                        return new InMemoryFile(base64_decode($data), 'key.p12');
+                        return new InMemoryFile($data, 'key.json');
                     }, Type::string())
             ),
             //

@@ -102,9 +102,8 @@ class AnalyticsConfigModuleTest extends CrudModuleTest
         $this->module->getCreateAction()->run([
             'type'    => 'google',
             'options' => [
-                'service_account_email' => 'some@email.com',
-                'private_key_data'      => [
-                    'file'   => new UploadedFileProxy(new InMemoryFile('abc123', 'key.p12')),
+                'service_account_key'      => [
+                    'file' => new UploadedFileProxy(new InMemoryFile('abc123', 'some-name.json')),
                     'action' => 'store-new',
                 ],
                 'view_id'               => 123456,
@@ -113,9 +112,8 @@ class AnalyticsConfigModuleTest extends CrudModuleTest
         ]);
 
         $driverConfig = new AnalyticsDriverConfig('google', GoogleAnalyticsForm::build([
-            'service_account_email' => 'some@email.com',
-            'private_key_data'      => [
-                'file'   => new UploadedFileProxy(new InMemoryFile('abc123', 'key.p12')),
+            'service_account_key'      => [
+                'file' => new UploadedFileProxy(new InMemoryFile('abc123', 'some-name.json')),
                 'action' => 'store-new',
             ],
             'view_id'               => 123456,
@@ -139,9 +137,8 @@ class AnalyticsConfigModuleTest extends CrudModuleTest
         $this->assertEquals([
             'installation_instructions' => (new GoogleAnalyticsDriver())->getInstallationInstructions(),
             'options' => GoogleAnalyticsForm::build([
-                'service_account_email' => 'some@email.com',
-                'private_key_data'      => [
-                    'file'   => new UploadedFileProxy(new InMemoryFile('abc123', 'key.p12')),
+                'service_account_key'      => [
+                    'file' => new UploadedFileProxy(new InMemoryFile('abc123', 'some-name.json')),
                     'action' => 'store-new',
                 ],
                 'view_id'               => 123456,

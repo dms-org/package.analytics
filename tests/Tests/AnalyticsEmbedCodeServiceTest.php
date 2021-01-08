@@ -23,9 +23,8 @@ class AnalyticsEmbedCodeServiceTest extends CmsTestCase
     {
         $drivers = [
             new AnalyticsDriverConfig('google', GoogleAnalyticsForm::build([
-                'service_account_email' => 'some@email.com',
-                'private_key_data'      => [
-                    'file' => new UploadedFileProxy(new InMemoryFile('abc123', 'some-name.p12')),
+                'service_account_key'      => [
+                    'file' => new UploadedFileProxy(new InMemoryFile('abc123', 'some-name.json')),
                     'action' => 'store-new',
                 ],
                 'view_id'               => 123456,

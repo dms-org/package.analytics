@@ -61,9 +61,9 @@ class GoogleAnalyticsDriver implements IAnalyticsDriver
 
 <p>In the overview, go to "Analytics API" and click "Enable"</p>
 
-<p>Under the credentials page create a "service account key" and ensure you select "New service account" and choose the *.p12 file format.</p>
+<p>Under the credentials page create a "service account key" and ensure you select "New service account" and choose the *.json file format.</p>
 
-<p>You will have to store the service account email and the private key (*.p12 file) and upload them here.</p>
+<p>You will have to download the service account key (*.json format) and upload it here.</p>
 
 <p>Now in <a href="https://analytics.google.com/" target="_blank">Google Analytics</a>, go to the "Admin" tab, select "View Settings" and copy the "View ID" here.</p>
 
@@ -137,22 +137,18 @@ HTML
      */
     protected function buildApiClient(GoogleAnalyticsForm $options) : Google_Client
     {
-        $credentials = new \Google_Auth_AssertionCredentials(
-            $options->serviceAccountEmail,
-            [Google_Service_Analytics::ANALYTICS_READONLY],
-            base64_decode($options->privateKeyData)
-        );
-
-        $client = new Google_Client();
+        $client = new Google_Client([
+            'scopes' => [Google_Service_Analytics::ANALYTICS_READONLY]
+        ]);
+        $client->setAuthConfig(json_decode($options->jsonServiceAccountKey, true));
         $client->setApplicationName('dms.package.analytics');
         if ($this->cache) {
-            $client->setCache(new GooglePsr6CacheAdapter($client, $this->cache));
+            $client->setCache($this->cache);
         }
         $client->setAccessType('offline');
 
-        $client->setAssertionCredentials($credentials);
-        if ($client->getAuth()->isAccessTokenExpired()) {
-            $client->getAuth()->refreshTokenWithAssertion();
+        if ($client->isAccessTokenExpired()) {
+            $client->refreshTokenWithAssertion();
 
             return $client;
         }
